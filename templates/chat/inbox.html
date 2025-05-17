@@ -1,0 +1,88 @@
+{% extends '_base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load cloudinary %}
+
+{% block title %}
+
+{% trans 'جميع المحادثات' %}
+
+{% endblock title %}
+
+{% block content %}
+
+<main>
+    <section class="container-fluid my-5">
+        <div class="row justify-content-center h-100 px-md-3">
+            <div class="col-12 col-md-6 mx-auto">
+                <h1 class="text-center mb-3">
+                    {% trans 'جميع المحادثات الخاصة بك' %}
+                </h1>
+                {% for thread in threads %}
+                    
+                    {% if thread.first == request.user  %}
+                    <a href="{% url 'chat:thread_messages' thread.second.id %}" class="text-decoration-none">
+                        <div class="card rounded-2 mb-3">
+                            <div class="row p-2 g-0">
+                                <div class="col-2 my-auto">
+                                    {% if thread.second.is_doctor and thread.second.profile_doctor.profile_pic %}
+                                        {% cloudinary thread.second.profile_doctor.profile_pic.name class="chat__icon" alt="User Logo" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                                    {% else %}
+                                        {% cloudinary "Assets/user_yyxue1.webp" class="chat__icon" alt="User Logo" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-7">
+                                    <span class="text-capitalize fw-bold fs-5">
+                                        {{ thread.second.name_en }}
+                                    </span>
+                                    <br>
+                                    <span class="{% if thread.chatmessage_set.last.read %}text-muted{% else %}text-black{% endif %}">
+                                        {{ thread.chatmessage_set.last }}
+                                    </span>
+                                </div>
+                                <div class="col-3 my-auto">
+                                    {{ thread.chatmessage_set.last.timestamp }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'chat:thread_messages' thread.first.id %}" class="text-decoration-none">
+                        <div class="card rounded-2 mb-3">
+                            <div class="row p-2 g-0">
+                                <div class="col-2 my-auto">
+                                    {% if thread.first.is_doctor and thread.first.profile_doctor.profile_pic %}
+                                        {% cloudinary thread.first.profile_doctor.profile_pic.name class="chat__icon" alt="User Logo" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                                    {% else %}
+                                        {% cloudinary "Assets/user_yyxue1.webp" class="chat__icon" alt="User Logo" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-7">
+                                    <span class="text-capitalize fw-bold fs-5">
+                                        {{ thread.first.name_en }}
+                                    </span>
+                                    <br>
+                                    <span class="{% if thread.chatmessage_set.last.read %}text-muted{% else %}text-black{% endif %}">
+                                        {{ thread.chatmessage_set.last }}
+                                    </span>
+                                </div>
+                                <div class="col-3 my-auto">
+                                    {{ thread.chatmessage_set.last.timestamp }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    {% endif %}
+                        
+                {% empty %}
+                <h1 class="text-center">
+                    {% trans "لا يوجد محادثات بعد!" %}
+                </h1>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock content %}

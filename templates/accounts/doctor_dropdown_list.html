@@ -1,0 +1,29 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% if doctors == None %}
+
+<option value="" selected>
+    {% trans "-- قم باختيار الاختصاص أولاً --" %}
+</option>
+
+{% else %}
+
+{% for doctor in doctors %}
+
+{% if LANGUAGE_CODE == 'en' %}
+<option value="{{ doctor.id }}">{{ doctor.name_en }}</option>
+
+{% else %}
+<option value="{{ doctor.id }}">{{ doctor.profile_doctor.name_ar }}</option>
+
+{% endif %}
+
+{% empty %}
+<option value="">
+    {% trans "-- لا يوجد لدينا أطباء في هذا الاختصاص حالياَ --" %}
+</option>
+
+{% endfor %}
+
+{% endif %}

@@ -1,0 +1,209 @@
+{% load static %}
+{% load i18n %}
+{% load cloudinary %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<nav class="navbar navbar-expand-lg navbar-light navbar__custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'base:index' %}">
+            {% cloudinary "Assets/logo_dhkemf.webp" alt="Logo" class="logo" fetch_format="webp" quality="auto:eco" width=65 height=65 sign_url=True %}
+            <span>
+                Al-Hakim
+            </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsingNavbar1"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse w-100" id="collapsingNavbar1">
+            <ul class="navbar-nav mb-2 mb-lg-0 navbar__nav-en">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'base:index' %}">
+                        <i class="fa-solid fa-house"></i>
+                        {% trans "الصفحة الرئيسية" %}
+                    </a>
+                </li>
+
+                {% if request.user.is_anonymous or request.user.is_patient %}
+                <li class="nav-item">
+                    <a href="{% url 'base:consult' %}" class="nav-link">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        {% trans "استشارة" %}
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="nav-item">
+                    <a href="{% url 'base:rules' %}" class="nav-link">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        {% trans "شروط استخدام منصتنا" %}
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-language"></i>
+                        {% trans "اللغة" %}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="langDropdown">
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
+                            {% if LANGUAGE_CODE == 'ar' %}
+                            <li>
+                                <button type='submit' name='language' value='en' class="dropdown-item">
+                                    <span class="label"></span>English
+                                </button>
+                            </li>
+                            {% else %}
+                            <li>
+                                <button type='submit' name='language' value='ar' class="dropdown-item">
+                                    <span class="label cairo">
+                                        العربية
+                                    </span>
+                                </button>
+                            </li>
+                            {% endif %}
+                        </form>
+                    </ul>
+                </li>
+            </ul>
+
+            
+            <ul
+                class="nav navbar-nav mobile__user-logo justify-content-end m{% if LANGUAGE_CODE == 'en' %}s{% else %}e{% endif %}-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>
+
+                            {% if request.user.profile_doctor.profile_pic %}
+                            {% cloudinary request.user.profile_doctor.profile_pic.name alt="User Logo" class="user__logo" fetch_format="webp" quality="auto:eco" width=52 height=52 crop="scale" sign_url=True %}
+                            {% else %}
+                            {% cloudinary "Assets/user_yyxue1.webp" alt="User Logo" class="user__logo" fetch_format="webp" quality="auto:eco" width=52 height=52 crop="scale" sign_url=True %}
+                            {% endif %}
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu {% if LANGUAGE_CODE == 'en' %}{% if request.user.is_superuser %}dropdown__custom-superuser{% elif request.user.is_doctor %}dropdown__custom-doctor{% else %}dropdown__custom-anonymous{% endif %}{% endif %}"
+                        aria-labelledby="navbarDropdown">
+
+                        {% if request.user.is_authenticated %}
+                        <li class="dropdown-item">
+                            <center>       
+                                {% if LANGUAGE_CODE == 'en' %}
+                                {{ request.user.name_en }}
+                                {% else %}
+                                {{ request.user.name_ar }}
+                                {% endif %}
+                            </center>
+                        </li>
+                        <hr>
+                        
+                        {% if request.user.is_superuser == False %}
+                            
+                        {% if request.user.is_doctor %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'accounts:profile' request.user.id %}">
+                                <i class="fa-solid fa-user-doctor"></i>
+                                {% trans "حساب الطبيب" %}
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a class="dropdown-item" href={% if request.user.is_authenticated and request.user.is_doctor %}{% url "accounts:update_doctor" request.user.id%}{% elif request.user.is_authenticated and request.user.is_patient %}{% url "accounts:update_patient" request.user.id%}{% endif %}>
+                                <i class="fa-solid fa-user-edit"></i>
+                                {% trans "تعديل الحساب" %}
+                            </a>
+                        </li>
+                        <hr />
+                        {% endif %}
+                        {% if request.user.is_staff %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'accounts:delete_doctor' %}">
+                                <i class="fa-solid fa-user-xmark"></i>
+                                {% trans "حذف حساب طبيب" %}
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if request.user.is_doctor and request.user.is_superuser == False %}
+
+                        <li class="d-flex align-items-center">
+                            <a class="dropdown-item" href="{% url 'base:requests_history' %}">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                {% trans "الاستشارات السابقة" %}
+                            </a>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <a class="dropdown-item" href="{% url 'base:requests_list' %}">
+                                <i class="fa-solid fa-message"></i>
+                                {% trans "الطلبات الواردة" %}
+                                <span class="messages__count">
+                                    {{ inbox_count|default:'0' }}
+                                </span>
+                            </a>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <a class="dropdown-item" href="{% url 'base:unknown_requests_list' %}">
+                                <i class="fa-solid fa-message"></i>
+                                {% trans "الطلبات مجهولة الاختصاص/الطبيب" %}
+                                <span class="messages__count">
+                                    {{ unknown_inbox_count|default:'0' }}
+                                </span>
+                            </a>
+                        </li>
+
+                        {% endif %}
+                        
+                        <li>
+                            <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                {% trans "تسجيل الخروج" %}
+                            </a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'accounts:login' %}">
+                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                {% trans "تسجيل الدخول" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'accounts:register_doctor' %}">
+                                <i class="fa-solid fa-user-plus"></i>
+                                {% trans "هل أنت طبيب؟ إنضم لفريقنا" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'accounts:register_patient' %}">
+                                <i class="fa-solid fa-user-plus"></i>
+                                {% trans "إنشاء حساب مريض جديد" %}
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'base:privacy' %}">
+                                <i class="fa-solid fa-user-lock"></i>
+                                {% trans "سياسة الخصوصية" %}
+                            </a>
+                        </li>
+        
+                        <li>
+                            <a class="dropdown-item" href="{% url 'base:terms' %}">
+                                <i class="fa-solid fa-list-alt"></i>
+                                {% trans "شروط الاستخدام" %}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: alhakim-consultation.click
+Sitemap: https://alhakim-consultation.click/sitemap.xml

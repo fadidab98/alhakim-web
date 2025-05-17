@@ -1,0 +1,383 @@
+{% extends '_base.html' %}
+
+{% load i18n %}
+
+{% block title %}
+{{ request.name }}
+{% endblock title %}
+
+{% block content %}
+
+<main id="main">
+    <div class="container my-5">
+        <section class="d-flex justify-content-center">
+            <div class="col-lg-6 col-md-6 mt-3 text-center">
+                <a href="#reply_request" class="btn btn-primary px-5 py-2">
+                    <i class="fa-solid fa-reply-all"></i>
+                    {% trans "الرد على الطلب" %}
+                </a>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2 text-center">
+                <form method="post" action="{% url 'base:delete_request' id=request.id %}?prev={{request.META.HTTP_REFERER}}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-5 py-2">
+                        <i class="fa-solid fa-trash-can"></i>
+                        {% trans "مسح الطلب" %}
+                    </button>
+                </form>
+            </div>
+        </section>
+        <hr>
+        <section>
+            <div class="row my-3">
+                <h4>
+                    <i class="fa-solid fa-user"></i>
+                    {% trans "اسم المريض:" %}
+                    <span>{{ request.patient.name_en }}</span>
+                </h4>
+            </div>
+
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-user-circle"></i>
+                    {% trans "العمر:" %}
+                    <span>{{ request.age }}</span>
+                </h4>
+            </div>
+
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-mars-and-venus"></i>
+                    {% trans "الجنس:" %}
+                    <span>{{ request.get_gender_display }}</span>
+                </h4>
+            </div>
+
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-phone"></i>
+                    {% trans "رقم الهاتف:" %}
+                    <span>
+                        {{ request.patient.phone }}
+                    </span>
+                </h4>
+            </div>
+
+            {% if request.problem %}
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-user-injured"></i>
+                    {% trans "المشكلة الصحية:" %}
+                    <span>
+                        {{ request.problem }}
+                    </span>
+                </h4>
+            </div>
+            {% endif %}
+
+            {% if request.problem_date %}
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-calendar-days"></i>
+                    {% trans "تاريخ ظهور المشكلة:" %}
+                    <span>
+                        {{ request.problem_date }}
+                    </span>
+                </h4>
+            </div>
+            {% endif %}
+
+            {% if request.symptoms %}
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-notes-medical"></i>
+                    {% trans "الأعراض:" %}
+                    {% for symptom in symptoms %}
+                        <span>
+                            {{ symptom }}
+                            {% if not forloop.last %}
+                                ,
+                            {% endif %}
+                        </span>
+                    {% endfor %}
+                </h4>
+            </div>
+            {% endif %}
+
+            {% if request.previous_surgaries %}
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    {% trans "العمليات الجراحية السابقة:" %}
+                    <span>
+                        {{ request.previous_surgaries }}
+                    </span>
+                </h4>
+            </div>
+            {% endif %}
+
+            {% if request.chronic_diseases %}
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-hospital-user"></i>
+                    {% trans "اﻷمراض المزمنة:" %}
+                    <span>
+                        {{ request.chronic_diseases }}
+                    </span>
+                </h4>
+            </div>
+            {% endif %}
+
+            {% if request.medicines %}
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-pills"></i>
+                    {% trans "اﻷدوية المتناولة:" %}
+                    <span>
+                        {{ request.medicines }}
+                    </span>
+                </h4>
+            </div>
+            {% endif %}
+
+            {% if request.allergy %}
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-hand-dots"></i>
+                    {% trans "الحساسيات لدى المريض:" %}
+                    <span>
+                        {{ request.allergy }}
+                    </span>
+                </h4>
+            </div>
+            {% endif %}
+
+            <div class="row mb-3">
+                <h4>
+                    <i class="fa-solid fa-hand-dots"></i>
+                    {% trans "تاريخ طلب الاستشارة" %}
+                    <span>
+                        {{ request.created }}
+                    </span>
+                </h4>
+            </div>
+
+            {% if documents %}
+            <div class="row mb-5">
+                <h4>
+                    <i class="fa-solid fa-file-image"></i>
+                    {% trans "صور أشعة / تحاليل طبية سابقة:" %}
+                </h4>
+                <div class="row d-flex justify-content-center">
+                    {% for document in documents %}
+                    <div class="col-lg-4 col-md-6">
+                        <a href="{{ document.document.url }}" target="_blank" class="document__link">
+                            <img src="{{ document.document.url }}?f_auto&q_auto" alt="Doc" class="img-fluid document__file">
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </section>
+        <hr>
+        <section id="reply_request">
+            <h1>
+                {% trans "الرد على الطلب" %}
+            </h1>
+
+            {% include '_messages.html' %}
+
+
+            <div class="d-flex">
+                {% for reply in reply_via %}
+
+                {% if reply == 'Email' and request.email %}
+                <button type="button" class="d-flex align-items-center gap-3 btn btn-primary px-5 mx-3 mt-3" data-bs-toggle="modal"
+                    data-bs-target="#replyModalEmail">
+                    <i class="fa-solid fa-envelope"></i>
+                    {% trans "الرد عبر الإيميل" %}
+                </button>
+
+                {% elif reply == 'Whatsapp' and request.patient.phone %}
+                <button type="button" class="btn btn-success align-items-center gap-3 px-5 mx-3 mt-3 whatsapp__pc" data-bs-toggle="modal"
+                    data-bs-target="#replyModalWhatsappPC">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    {% trans "الرد عبر الواتساب" %}
+                </button>
+                <button type="button" class="btn btn-success align-items-center gap-3 px-5 mx-3 mt-3 whatsapp__mobile" data-bs-toggle="modal"
+                    data-bs-target="#replyModalWhatsappMobile">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    {% trans "الرد عبر الواتساب" %}
+                </button>
+
+                {% elif reply == 'Telegram' and request.patient.phone %}
+                <button type="button" class="d-flex align-items-center gap-3 btn btn-primary px-5 mx-3 mt-3" data-bs-toggle="modal"
+                    data-bs-target="#replyModalTelegram">
+                    <i class="fa-brands fa-telegram"></i>
+                    {% trans "الرد عبر التلغرام" %}
+                </button>
+
+                {% else %}
+                <button type="button" class=" d-flex align-items-center gap-3btn btn-primary px-5 mx-3 mt-3" data-bs-toggle="modal"
+                    data-bs-target="#replyModalDirect">
+                    <i class="fa-solid fa-message"></i>
+                    {% trans "الرد عبر الموقع (مباشر)" %}
+                </button>
+                
+                {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+            <div class="modal fade" id="replyModalEmail" tabindex="-1" aria-labelledby="replyModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between">
+                            <h5 class="modal-title">
+                                {% trans "الرد عبر اﻹيميل" %}
+                            </h5>
+                            <button type="button" class="btn modal__close-btn" data-bs-dismiss="modal" aria-label="Close">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                {% if form.errors %}
+                                {% for field in form %}
+                                {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <svg class="bi flex-shrink-0 mx-2" width="24" height="24" role="img"
+                                        aria-label="Danger:">
+                                        <use xlink:href="#exclamation-triangle-fill" />
+                                    </svg>
+                                    <strong>{{field.label}} - {{ error|escape }}</strong>
+                                </div>
+                                {% endfor %}
+                                {% endfor %}
+                                {% endif %}
+
+                                <label for="body" class="form-label d-block">
+                                    <i class="fa-solid fa-message"></i>
+                                    {% trans "أدخل الرسالة" %}
+                                </label>
+                                <textarea name="body" class="form-control mb-3" placeholder="{% trans 'أدخل الرسالة...' %}" cols="30"
+                                    rows="7"></textarea>
+
+                                <label for="attachment" class="form-label d-block">
+                                    <i class="fa-solid fa-paperclip"></i>
+                                    {% trans "أدخل الملفات المرفقة" %}
+                                </label>
+                                <input type="file" name="attachment" id="attachment" multiple>
+
+                                <div class="row mt-4 mx-5">
+                                    <button type="submit" name="email_reply" class="btn btn-primary">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                        {% trans 'إرسال' %}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if request.patient.phone %}
+            <div class="modal fade" id="replyModalWhatsappPC" tabindex="-1" aria-labelledby="replyModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between">
+                            <h5 class="modal-title">
+                                {% trans "الرد عبر الواتساب" %}
+                            </h5>
+                            <button type="button" class="btn modal__close-btn" data-bs-dismiss="modal" aria-label="Close">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body py-5 text-center">
+                            <a href="{% url 'base:whatsapp_reply' request.id request.patient.phone 'pc' %}" target="_blank" rel="noopener noreferrer" class="btn btn-success px-4 py-2">
+                                <i class="fa-solid fa-up-right-from-square"></i>
+                                {% trans "فتح نافذة واتساب جديدة" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="replyModalWhatsappMobile" tabindex="-1" aria-labelledby="replyModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between">
+                            <h5 class="modal-title">
+                                {% trans "الرد عبر الواتساب" %}
+                            </h5>
+                            <button type="button" class="btn modal__close-btn" data-bs-dismiss="modal" aria-label="Close">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body py-5 text-center">
+                            <a href="{% url 'base:whatsapp_reply' request.id request.patient.phone 'mobile' %}" target="_blank" rel="noopener noreferrer" class="btn btn-success px-4 py-2">
+                                <i class="fa-solid fa-up-right-from-square"></i>
+                                {% trans "فتح نافذة واتساب جديدة" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="replyModalTelegram" tabindex="-1" aria-labelledby="replyModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between">
+                            <h5 class="modal-title">
+                                {% trans "الرد عبر التلغرام" %}
+                            </h5>
+                            <button type="button" class="btn modal__close-btn" data-bs-dismiss="modal" aria-label="Close">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body py-5 text-center">
+                            <a href="https://t.me/{{request.patient.phone}}" target="_blank" rel="noopener noreferrer" class="btn btn-primary px-4 py-2">
+                                <i class="fa-solid fa-up-right-from-square"></i>
+                                {% trans "فتح نافذة تلغرام جديدة" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="modal fade" id="replyModalDirect" tabindex="-1" aria-labelledby="replyModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between">
+                            <h5 class="modal-title">
+                                {% trans "الرد عبر الموقع (مباشر)" %}
+                            </h5>
+                            <button type="button" class="btn modal__close-btn" data-bs-dismiss="modal" aria-label="Close">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <a href="{% url 'base:direct_reply' request.patient.id %}" class="btn btn-success px-4 py-2">
+                                <i class="fa-solid fa-up-right-from-square"></i>
+                                {% trans "الرد" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</main>
+
+{% endblock content %}

@@ -1,0 +1,185 @@
+{% extends '_base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block title %}
+{% trans "تسجيل دخول المستخدمين" %}
+
+{% if 'chat' in request.get_full_path %}
+    {% trans 'الدردشة' %}
+{% elif 'consult' in request.get_full_path %}
+    {% trans 'استشارة' %}
+{% endif %}
+    
+{% endblock title %}
+
+{% block extra_head %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.16/css/intlTelInput.css"
+    integrity="sha512-gxWow8Mo6q6pLa1XH/CcH8JyiSDEtiwJV78E+D+QP0EVasFs8wKXq16G8CLD4CJ2SnonHr4Lm/yY2fSI2+cbmw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+{% endblock extra_head %}
+    
+
+{% block content %}
+
+<main class="container mt-4">
+
+    {% include '_messages.html' %}
+    
+    <section>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="hint-message">
+                    <div class="row g-0">
+                    <div class="col-auto my-auto">
+                        <div class="bot-icon">
+                            <i class="fas fa-message pt-1"></i>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="hint-message-content">
+                        <h4 class="hint-message-title">
+                            {% trans 'دليلك للتسجيل في منصة الحكيم:' %}
+                        </h4>
+                        <div class="hint-message-text">
+                            <ol>
+                                <li>
+                                    {% trans 'أول زيارة للموقع! انشىء حساب جديد' %} 
+                                    <a href="{% url 'accounts:register_patient' %}" class="link-primary text-decoration-none mx-1">
+                                        {% trans "من هنا." %}
+                                    </a>
+                                    <br>
+                                    {% trans 'أضف رقم الجوال و كلمة سر خاصة بك.' %}
+                                    <br>
+                                    {% trans 'اضغط على انشىء الحساب واطلب استشارة.' %}
+                                    <br>
+                                    {% trans 'املاء الاستمارة الالكترونية و احصل على استشارة طبية مجانية.' %}
+                                </li>
+                                <br>
+                                <li>
+                                    {% trans "لديك حساب بالفعل!" %}
+                                    <br>
+                                    {% trans "أضف رقم الجوال الذي انشأت عليه الحساب سابقا و كلمة المرور الخاصة بك." %}
+                                    <br>
+                                    {% trans "املاء الاستمارة الالكترونية و احصل على استشارة طبية مجانية." %}
+                                    <br>
+                                    {% trans "في حال نسيت كلمة المرور الخاصة بك اضغط على نسيت كلمة المرور" %}
+                                </li>
+                            </ol>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="row mt-2">
+            <div class="col-sm-8 offset-sm-2">
+                <h3>
+                    <a href="{% url 'accounts:register_patient' %}">
+                        {% trans 'إنشاء حساب مريض جديد' %}
+                    </a>
+                </h3>
+                <br>
+                <h1>
+                    {% trans "تسجيل الدخول" %}
+                </h1>
+            </div>
+        </div>
+    </section>
+
+    <section>
+
+            <div class="col-12 col-md-6 mx-auto">
+                <div class="d-flex justify-content-center my-5 login__form-container2">
+
+                    <form method="post" class="login__form" id="login__form">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                        <div class="mb-5">
+                            {% if not forloop.last %}
+                            <i class="fa-solid fa-phone"></i>
+                            {% else %}
+                            <i class="fa-solid fa-unlock-keyhole"></i>
+                            {% endif %}
+                            <label for="{{field.name}}" class="form-label">
+                                {% trans field.label %}
+                            </label>
+                            {% if field.name == 'username' %}
+                            <br>
+                            {% comment %} <input type="tel" name="username" id="id_username" autocomplete="false" class="form-control form__phone" required> {% endcomment %}
+                            {% render_field field class="form-control form__phone" type="tel" id="id_username" autocomplete="false" required="true" %}
+                            <div class="form-text"> {% trans 'أدخل رقمك مباشرة من دون الرمز الدولي' %} </div>
+                            {% else %}
+                            {% render_field field class="form-control" %}
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div>
+                            <a href="{% url 'accounts:reset_password' %}" class="link-primary text-decoration-none">
+                                {% trans "نسيت كلمة المرور؟" %}
+                            </a>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary mt-4 d-flex align-items-center gap-3 px-5">
+                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                {% trans 'تسجيل الدخول' %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.16/js/intlTelInput.min.js"
+integrity="sha512-Po9nSdYOcWIcoADdRjkAbRYPpR8OHjxzA/3RDUERZcDewTLzRTxbG4bUX7Sr7lVEcO3wTCzphdOBWgNFKVmxaA=="
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+
+let input = document.querySelector("#id_username");
+let iti = window.intlTelInput(input, {
+  utilsScript:
+    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.16/js/utils.min.js?1638200991544",
+  initialCountry: "auto",
+  geoIpLookup: function (callback) {
+    $.get("https://ipinfo.io", function () {}, "jsonp").always(function (resp) {
+      var countryCode = resp && resp.country ? resp.country : "sy";
+      callback(countryCode);
+    });
+  },
+});
+
+$("#login__form").submit(function (e) {
+  if (iti.getNumber() == "") {
+    $("#id_username").val("empty");
+  } else if (/[a-zA-Z]/.test(iti.getNumber())) {
+    $("#id_username").val("letters");
+  } else if (!iti.isValidNumber()) {
+    $("#id_username").val("invalid");
+  } else {
+    $("#id_username").val(iti.getNumber());
+  }
+});
+
+</script>
+
+{% endblock extra_scripts %}

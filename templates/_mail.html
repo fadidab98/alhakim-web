@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <metacharset="UTF-8" />
+    <metaname="viewport"content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+
+    <h2>
+        {{ message }}
+    </h2>
+
+    {% for file in files %}
+
+        <img src="{{ file.url }}">
+
+    {% endfor %}
+
+</body>
+
+</html>

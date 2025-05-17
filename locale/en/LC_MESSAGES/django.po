@@ -1,0 +1,1067 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-16 21:32+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/forms.py:12 accounts/forms.py:21 accounts/forms.py:73
+#: accounts/forms.py:84 accounts/forms.py:323
+msgid "رقم الهاتف"
+msgstr "Phone number"
+
+#: accounts/forms.py:19 accounts/forms.py:83
+msgid "الاسم الكامل بالإنجليزية"
+msgstr "Full name - English"
+
+#: accounts/forms.py:20 accounts/forms.py:145 accounts/forms.py:225
+#: accounts/forms.py:324 base/forms.py:54 base/models.py:26
+#: templates/base/index.html:409
+msgid "الإيميل"
+msgstr "Email"
+
+#: accounts/forms.py:38 accounts/forms.py:98 accounts/views.py:48
+msgid "رقم الهاتف الذي أدخلته خاطئ!"
+msgstr "The phone number you provided is incorrect!"
+
+#: accounts/forms.py:75 templates/accounts/password_reset_confirm.html:41
+msgid "كلمة المرور الجديدة"
+msgstr "New password"
+
+#: accounts/forms.py:76 templates/accounts/password_reset_confirm.html:43
+msgid "تأكيد كلمة المرور الجديدة"
+msgstr "Confirm new password"
+
+#: accounts/forms.py:101
+msgid "كلمات المرور التي أدخلتها غير متطابقة!"
+msgstr "The passwords you provided are not identical!"
+
+#: accounts/forms.py:124 accounts/forms.py:204
+msgid "-- اختر الاختصاص --"
+msgstr "-- Select specialty --"
+
+#: accounts/forms.py:124 accounts/forms.py:204
+msgid "اختيار اختصاص موجود سابقاً"
+msgstr "Choose an existing specialty"
+
+#: accounts/forms.py:126 accounts/forms.py:206
+msgid "اسم الاختصاص الجديد بالعربية"
+msgstr "New specialty name - Arabic"
+
+#: accounts/forms.py:127 accounts/forms.py:207
+msgid "اسم الاختصاص الجديد بالإنجليزية"
+msgstr "New specialty name - English"
+
+#: accounts/forms.py:134 accounts/forms.py:214
+msgid "الصورة الشخصية"
+msgstr "Profile picture"
+
+#: accounts/forms.py:135 accounts/forms.py:215
+msgid "لمحة عن الطبيب بالعربية"
+msgstr "Bio - Arabic"
+
+#: accounts/forms.py:136 accounts/forms.py:216
+msgid "لمحة عن الطبيب بالإنجليزية"
+msgstr "Bio - English"
+
+#: accounts/forms.py:137 accounts/forms.py:217
+msgid "صورة البطاقة النقابية"
+msgstr "Syndicate card"
+
+#: accounts/forms.py:138 accounts/forms.py:218
+msgid "الرقم النقابي"
+msgstr "Syndicate number"
+
+#: accounts/forms.py:139 accounts/forms.py:219
+#: templates/accounts/profile.html:89
+msgid "السيرة الذاتية"
+msgstr "CV / Resume"
+
+#: accounts/forms.py:140 accounts/forms.py:220
+msgid "أعلى درجة علمية"
+msgstr "Highest academic degree"
+
+#: accounts/forms.py:141 accounts/forms.py:221
+msgid "عنوان العمل بالعربية"
+msgstr "Work location - Arabic"
+
+#: accounts/forms.py:142 accounts/forms.py:222
+msgid "عنوان العمل بالإنجليزية"
+msgstr "Work location - English"
+
+#: accounts/forms.py:143 accounts/forms.py:223
+msgid "الاسم الكامل بالعربية"
+msgstr "Full name - Arabic"
+
+#: accounts/forms.py:144 accounts/forms.py:224
+msgid "المدينة بالعربية"
+msgstr "City - Arabic"
+
+#: accounts/forms.py:146 accounts/forms.py:226
+msgid "الدولة"
+msgstr "Country"
+
+#: accounts/forms.py:147 accounts/forms.py:227
+msgid "المدينة بالإنجليزية"
+msgstr "City - English"
+
+#: accounts/forms.py:174 accounts/forms.py:254
+msgid "يجب اختيار اختصاص الطبيب!"
+msgstr "Doctor must have a specialty!"
+
+#: accounts/forms.py:176 accounts/forms.py:256
+msgid "يجب اختيار اختصاص واحد للطبيب!"
+msgstr "Doctor can't have more than one specialty!"
+
+#: accounts/forms.py:286
+msgid "-- اختر اختصاص الطبيب --"
+msgstr "-- Select Doctor Specialty --"
+
+#: accounts/forms.py:286 base/forms.py:16 base/forms.py:42
+msgid "الاختصاص"
+msgstr "Specialities"
+
+#: accounts/forms.py:287 base/forms.py:22 base/forms.py:43
+msgid "الطبيب"
+msgstr "Doctor"
+
+#: accounts/forms.py:287 accounts/forms.py:306 base/forms.py:21
+#: base/forms.py:81 templates/accounts/doctor_dropdown_list.html:7
+msgid "-- قم باختيار الاختصاص أولاً --"
+msgstr "-- Choose Specialties First --"
+
+#: accounts/models.py:24 accounts/models.py:42 accounts/views.py:82
+#: accounts/views.py:176 accounts/views.py:250 accounts/views.py:313
+msgid "هذا الرقم مأخوذ سابقا, الرجاء استخدام رقم اخر"
+msgstr "This number is already taken, please use another phone number"
+
+#: accounts/models.py:79
+msgid "Bachelor's Degree"
+msgstr ""
+
+#: accounts/models.py:80
+msgid "Master's Degree"
+msgstr ""
+
+#: accounts/models.py:81
+msgid "Doctoral's Degree"
+msgstr ""
+
+#: accounts/views.py:50
+msgid "معلومات الحساب التي أدخلتها خاطئة!"
+msgstr "The information you provided are incorrect!"
+
+#: accounts/views.py:90
+msgid "تم إرسال طلب إنشاء حساب جديد. الرجاء الانتظار حتى نقبل طلبك!"
+msgstr "A new account request was sent. Please wait for approval"
+
+#: accounts/views.py:182 accounts/views.py:319
+msgid "تم تعديل حسابك بنجاح!"
+msgstr "Your account was updated successfully"
+
+#: accounts/views.py:203
+msgid "تم حذف حساب الطبيب بنجاح!"
+msgstr "Doctor's account was deleted successfully!"
+
+#: accounts/views.py:258
+msgid "تم إنشاء حساب جديد!"
+msgstr "A new account was created successfully!"
+
+#: accounts/views.py:350 templates/accounts/password_reset.html:8
+#: templates/accounts/password_reset.html:23
+#: templates/accounts/password_reset_confirm.html:7
+#: templates/accounts/password_reset_confirm.html:14
+#: templates/accounts/password_reset_done.html:7
+msgid "إعادة تعيين كلمة المرور"
+msgstr "Reset password"
+
+#: base/forms.py:15
+msgid "-- لا أعرف الاختصاص المتعلق بمشكلتي --"
+msgstr "-- I don't know the specialty of my problem --"
+
+#: base/forms.py:27 base/forms.py:45
+msgid "الأعراض"
+msgstr "Symptoms"
+
+#: base/forms.py:33
+msgid "الرد عبر"
+msgstr "Reply via"
+
+#: base/forms.py:44
+msgid "المشكلة الصحية"
+msgstr "Medical issue"
+
+#: base/forms.py:46
+msgid "تاريخ بدء المشكلة"
+msgstr "Beginning of the problem"
+
+#: base/forms.py:47
+msgid "أمراض مزمنة"
+msgstr "Chronic diseases"
+
+#: base/forms.py:48
+msgid "اﻷدوية المتناولة"
+msgstr "Drugs taken"
+
+#: base/forms.py:49
+msgid "حساسية"
+msgstr "Allergies"
+
+#: base/forms.py:50
+msgid "عمليات سابقة"
+msgstr "Previous surgeries"
+
+#: base/forms.py:51
+msgid "الرد على الطلب عبر"
+msgstr "Reply to the request via"
+
+#: base/forms.py:52
+msgid "العمر"
+msgstr "Age"
+
+#: base/forms.py:53
+msgid "الجنس"
+msgstr "Gender"
+
+#: base/forms.py:92
+msgid "صور أشعة / تحاليل طبية"
+msgstr "XRay images / Medical analysis"
+
+#: base/models.py:15
+msgid "ألم"
+msgstr "Pain"
+
+#: base/models.py:16
+msgid "حرارة"
+msgstr "Fever"
+
+#: base/models.py:17
+msgid "صداع"
+msgstr "Headache"
+
+#: base/models.py:18
+msgid "تورم"
+msgstr "Inflation"
+
+#: base/models.py:19
+msgid "دوار"
+msgstr "Vertigo"
+
+#: base/models.py:20
+msgid "تقيأ"
+msgstr "Vomiting"
+
+#: base/models.py:21
+msgid "إسهال"
+msgstr "Diarrhea"
+
+#: base/models.py:22
+msgid "إمساك"
+msgstr "Constipation"
+
+#: base/models.py:23
+msgid "صعوبة التنفس"
+msgstr "Breathing difficulty"
+
+#: base/models.py:27
+msgid "الواتساب"
+msgstr "Whatsapp"
+
+#: base/models.py:28
+msgid "تيليغرام"
+msgstr "Telegram"
+
+#: base/models.py:29
+msgid "مباشرة (من خلال هذا الموقع)"
+msgstr "Directly (through this website)"
+
+#: base/models.py:32
+msgid "Male"
+msgstr ""
+
+#: base/models.py:33
+msgid "Female"
+msgstr ""
+
+#: base/views.py:75
+msgid "أهلا وسهلا بك في موقعنا"
+msgstr "Welcome to our platform"
+
+#: base/views.py:144
+msgid "تم إرسال الطلب بنجاح!"
+msgstr "Your request was sent successfully!"
+
+#: base/views.py:150
+msgid "حدث خطأ أثناء معالجة الطلب."
+msgstr "An error happened while processing your request"
+
+#: base/views.py:152
+msgid "حدث خطأ في استمارة الاستشارة."
+msgstr "An error happened in the consultation form"
+
+#: base/views.py:258
+msgid "حصلت مشكلة أثناء الإرسال, الرجاء المحاولة لاحقاً"
+msgstr "An error has occurred while sending, please try again later"
+
+#: base/views.py:263
+msgid "تم إرسال الإيميل بنجاح!"
+msgstr "Email was sent successfully!"
+
+#: chat/models.py:68
+msgid "تم إرسال ملف"
+msgstr "Your file was sent successfully!"
+
+#: common/templatetags/hts.py:19
+msgid " second"
+msgstr ""
+
+#: common/templatetags/hts.py:22
+msgid " seconds"
+msgstr ""
+
+#: common/templatetags/hts.py:30
+msgid " minute"
+msgstr ""
+
+#: common/templatetags/hts.py:33
+msgid " minutes"
+msgstr ""
+
+#: common/templatetags/hts.py:41
+msgid " hour"
+msgstr ""
+
+#: common/templatetags/hts.py:44
+msgid " hours"
+msgstr ""
+
+#: common/templatetags/hts.py:51
+msgid " day"
+msgstr ""
+
+#: common/templatetags/hts.py:54
+msgid " days"
+msgstr ""
+
+#: common/templatetags/hts.py:61
+msgid " month"
+msgstr ""
+
+#: common/templatetags/hts.py:64
+msgid " months"
+msgstr ""
+
+#: common/templatetags/hts.py:71
+msgid " year"
+msgstr ""
+
+#: common/templatetags/hts.py:74
+msgid " years"
+msgstr ""
+
+#: common/validators/validate_file_size.py:10
+msgid "File size must be less than 10 MB."
+msgstr ""
+
+#: core/settings/base.py:98
+msgid "Arabic"
+msgstr ""
+
+#: core/settings/base.py:99
+msgid "English"
+msgstr ""
+
+#: templates/_header.html:25
+msgid "الصفحة الرئيسية"
+msgstr "Home"
+
+#: templates/_header.html:33 templates/accounts/login.html:13
+#: templates/base/index.html:56 templates/base/index.html:344
+#: templates/base/index.html:353
+msgid "استشارة"
+msgstr "Consultation"
+
+#: templates/_header.html:41 templates/base/rules.html:8
+msgid "شروط استخدام منصتنا"
+msgstr "Our Platform Terms"
+
+#: templates/_header.html:49
+msgid "اللغة"
+msgstr "Language"
+
+#: templates/_header.html:111
+msgid "حساب الطبيب"
+msgstr "Profile"
+
+#: templates/_header.html:118
+msgid "تعديل الحساب"
+msgstr "Edit account"
+
+#: templates/_header.html:127 templates/accounts/delete_doctor.html:7
+msgid "حذف حساب طبيب"
+msgstr "Delete doctor's account"
+
+#: templates/_header.html:137 templates/base/history.html:7
+#: templates/base/history.html:16
+msgid "الاستشارات السابقة"
+msgstr "Consultation history"
+
+#: templates/_header.html:143 templates/base/requests_list.html:7
+#: templates/base/requests_list.html:16
+msgid "الطلبات الواردة"
+msgstr "Requests"
+
+#: templates/_header.html:152
+msgid "الطلبات مجهولة الاختصاص/الطبيب"
+msgstr "Unknown doctor/specialty requests"
+
+#: templates/_header.html:164
+msgid "تسجيل الخروج"
+msgstr "Logout"
+
+#: templates/_header.html:171 templates/accounts/login.html:92
+#: templates/accounts/login.html:137
+msgid "تسجيل الدخول"
+msgstr "Login"
+
+#: templates/_header.html:177
+msgid "هل أنت طبيب؟ إنضم لفريقنا"
+msgstr "Are you a doctor? Join our team"
+
+#: templates/_header.html:183 templates/accounts/login.html:87
+#: templates/base/index.html:36
+msgid "إنشاء حساب مريض جديد"
+msgstr "Register patient"
+
+#: templates/_header.html:193 templates/base/privacy.html:7
+msgid "سياسة الخصوصية"
+msgstr "Privacy policy"
+
+#: templates/_header.html:200 templates/base/terms.html:8
+msgid "شروط الاستخدام"
+msgstr "Terms and conditions"
+
+#: templates/_messages.html:28 templates/_messages.html:37
+#: templates/base/consult.html:52 templates/base/consult.html:69
+msgid "التنبيهات"
+msgstr "Notifications"
+
+#: templates/accounts/delete_doctor.html:48
+msgid "حذف حساب الطبيب"
+msgstr "Delete doctor's account"
+
+#: templates/accounts/doctor_dropdown_list.html:24
+msgid "-- لا يوجد لدينا أطباء في هذا الاختصاص حالياَ --"
+msgstr "-- We don't have doctors in this specialty yet --"
+
+#: templates/accounts/login.html:8
+msgid "تسجيل دخول المستخدمين"
+msgstr "Users Sign In"
+
+#: templates/accounts/login.html:11
+msgid "الدردشة"
+msgstr "Chat"
+
+#: templates/accounts/login.html:46
+msgid "دليلك للتسجيل في منصة الحكيم:"
+msgstr "Your guide to register in AlHakim platform"
+
+#: templates/accounts/login.html:51
+msgid "أول زيارة للموقع! انشىء حساب جديد"
+msgstr "First visit to our website! Create a new account"
+
+#: templates/accounts/login.html:53
+msgid "من هنا."
+msgstr "from here."
+
+#: templates/accounts/login.html:56
+msgid "أضف رقم الجوال و كلمة سر خاصة بك."
+msgstr "Add your mobile number and password."
+
+#: templates/accounts/login.html:58
+msgid "اضغط على انشىء الحساب واطلب استشارة."
+msgstr "Click on Create an account and request a consultation."
+
+#: templates/accounts/login.html:60 templates/accounts/login.html:68
+msgid "املاء الاستمارة الالكترونية و احصل على استشارة طبية مجانية."
+msgstr "Fill out the electronic form and get a free medical consultation."
+
+#: templates/accounts/login.html:64
+msgid "لديك حساب بالفعل!"
+msgstr "Already have an account!"
+
+#: templates/accounts/login.html:66
+msgid "أضف رقم الجوال الذي انشأت عليه الحساب سابقا و كلمة المرور الخاصة بك."
+msgstr ""
+"Add the mobile number on which you previously created the account and your "
+"password."
+
+#: templates/accounts/login.html:70
+msgid "في حال نسيت كلمة المرور الخاصة بك اضغط على نسيت كلمة المرور"
+msgstr "In case you forgot your password, click on Forgot Password"
+
+#: templates/accounts/login.html:121 templates/accounts/password_reset.html:44
+#: templates/accounts/register.html:97
+msgid "أدخل رقمك مباشرة من دون الرمز الدولي"
+msgstr "Enter your number directly without the country code"
+
+#: templates/accounts/login.html:130
+msgid "نسيت كلمة المرور؟"
+msgstr "Forgot password?"
+
+#: templates/accounts/password_reset.html:27
+msgid ""
+"هل نسيت كلمة المرور؟ أدخل رقم هاتفك الذي سجلت به و الإيميل أدناه وسوف نقوم "
+"بإرسال تعليمات على الإيميل الخاص بك للحصول على كلمة مرور جديدة."
+msgstr ""
+"Forgot password? Enter your phone and email below and we will send you "
+"instructions to get a new password."
+
+#: templates/accounts/password_reset.html:54
+msgid "استعد كلمة مروري"
+msgstr "Reset password"
+
+#: templates/accounts/password_reset_confirm.html:51
+msgid "حفظ"
+msgstr "Save"
+
+#: templates/accounts/password_reset_done.html:14
+msgid ""
+"لقد أرسلنا لك إيميل يحتوي على رابط لإعادة تعيين كلمة مرورك, إذا كان يوجد "
+"حساب مرتبط مع الرقم الذي أدخلته."
+msgstr ""
+"We've emailed you a link for setting your password, if an account exists "
+"with the phone you entered."
+
+#: templates/accounts/password_reset_done.html:20
+msgid "إذا لم يصلك إيميل, تأكد من الحساب الذي أدخلته, وتأكد من مجلد السبام."
+msgstr ""
+"If you don't receive an email, please make sure you've entered the right "
+"address, and check your spam folder."
+
+#: templates/accounts/profile.html:8
+msgid "الحساب الشخصي"
+msgstr "Profile"
+
+#: templates/accounts/profile.html:52
+msgid "المعلومات"
+msgstr "Information"
+
+#: templates/accounts/profile.html:57
+msgid "مكان العمل"
+msgstr "Job location"
+
+#: templates/accounts/profile.html:96
+msgid "لمحة عن الطبيب"
+msgstr "Bio"
+
+#: templates/accounts/register.html:10
+msgid "إضافة حساب مستخدم"
+msgstr "Add a user account"
+
+#: templates/accounts/register.html:12
+msgid "طبيب"
+msgstr "Doctor"
+
+#: templates/accounts/register.html:14
+msgid "مريض"
+msgstr "Patient"
+
+#: templates/accounts/register.html:82
+msgid "الاسم الكامل"
+msgstr "Full name"
+
+#: templates/accounts/register.html:86
+msgid "المدينة"
+msgstr "City"
+
+#: templates/accounts/register.html:102
+msgid "يجب أن تتكون كلمة المرور من 8 خانات على الأقل"
+msgstr "Your password must be at least 8 charachters long"
+
+#: templates/accounts/register.html:118
+msgid "-- الرجاء الاختيار من هذه القائمة --"
+msgstr "-- Please Select From This List --"
+
+#: templates/accounts/register.html:126 templates/accounts/update.html:136
+msgid "- أو -"
+msgstr "- OR -"
+
+#: templates/accounts/register.html:135
+msgid "إنشاء حساب جديد و طلب استشارة"
+msgstr "Register and request consultation"
+
+#: templates/accounts/register.html:137
+msgid "إنشاء حساب جديد"
+msgstr "Create a new account"
+
+#: templates/accounts/update.html:8 templates/accounts/update.html:30
+msgid "تعديل حساب المستخدم"
+msgstr "Edit user's account"
+
+#: templates/accounts/update.html:144
+msgid "تعديل"
+msgstr "Edit"
+
+#: templates/base/consult.html:8
+msgid "طلب استشارة جديد"
+msgstr "Request consultation"
+
+#: templates/base/consult.html:37
+msgid "الإستمارة الإلكترونية"
+msgstr "Online form"
+
+#: templates/base/consult.html:104
+msgid "المفضلة"
+msgstr "Preferred"
+
+#: templates/base/consult.html:108
+msgid "جديد"
+msgstr "New"
+
+#: templates/base/consult.html:123
+msgid "إذا تريد أن نتواصل معك عبر الإيميل, الرجاء تعبئة حقل الإيميل"
+msgstr "If you want us to contact you with email, please fill the email field"
+
+#: templates/base/consult.html:128
+msgid ""
+"أمراض قلب وأوعية دموية, سكري, ضغط, أمراض الكلى, أمراض الكبد, جلطات قلبية "
+"ودماغية..."
+msgstr ""
+"Heart diseases, diabetes, hypertension, kidney disease, liver disease, "
+"strokes"
+
+#: templates/base/consult.html:133
+msgid "تحديد الاختصاص يساعدنا على الرد بسرعة"
+msgstr "Selecting a specialty will help us respond sooner"
+
+#: templates/base/consult.html:138
+msgid ""
+"قم باختيار الطريقة/الطرق التي يمكننا من خلالها الرد على طلب الإستمارة الخاص "
+"بك"
+msgstr ""
+"Choose the way(s) that we can use to reply to your consultation request"
+
+#: templates/base/consult.html:140
+msgid "لضمان سرعة الرد على استفساراتكم، قم بتحديد عدة طرق للتواصل!"
+msgstr ""
+"To ensure a quick response to your requests, select several methods of "
+"communication!"
+
+#: templates/base/consult.html:154
+msgid "يمكن إضافة عدة ملفات"
+msgstr "You can select multiple files"
+
+#: templates/base/consult.html:163
+msgid "باستخدام هذه الخدمة، أنا أوافق على "
+msgstr "By using this service, I agree to the"
+
+#: templates/base/consult.html:165
+msgid "الشروط والأحكام"
+msgstr "Terms and conditions"
+
+#: templates/base/consult.html:172 templates/base/index.html:422
+#: templates/base/request_details.html:280
+msgid "إرسال"
+msgstr "Send"
+
+#: templates/base/history.html:47
+msgid "الإيميل:"
+msgstr "Email:"
+
+#: templates/base/history.html:53 templates/base/request_details.html:59
+msgid "رقم الهاتف:"
+msgstr "Phone number:"
+
+#: templates/base/history.html:60
+msgid "لا يوجد استشارات سابقة حاليا!"
+msgstr "There are no consultations in history"
+
+#: templates/base/index.html:10
+msgid " منصة الحكيم للاستشارات الطبية"
+msgstr "AlHakim Medical Consultation Platform"
+
+#: templates/base/index.html:22
+msgid "أهلا بك في موقع الحكيم"
+msgstr "Welcome to Al-Hakim platform"
+
+#: templates/base/index.html:26
+msgid "للاستشارات الطبية المجانية عبر الانترنت"
+msgstr "For free online medical consultation"
+
+#: templates/base/index.html:44
+msgid "انضم لفريقنا"
+msgstr "Join Our Team"
+
+#: templates/base/index.html:69
+msgid "لماذا نحن!"
+msgstr "Why Us!"
+
+#: templates/base/index.html:72
+msgid "فريقنا الطبي جاهز لمساعدتك دائماً!"
+msgstr "Our medical staff are always ready to help!"
+
+#: templates/base/index.html:74
+msgid "اطلب استشارة مجانية من منزلك وعلى جهازك بكل سهولة."
+msgstr ""
+"Request consultation from your home and on your device freely and easily."
+
+#: templates/base/index.html:85
+msgid "استشارة مجانية"
+msgstr "Free Consultation"
+
+#: templates/base/index.html:88
+msgid "طلب استشارة طبية مجانية بالكامل من خلال هذه المنصة."
+msgstr ""
+"Request consultation from your home and on your device freely and easily."
+
+#: templates/base/index.html:96
+msgid "دعم 24/7"
+msgstr "24/7 Support"
+
+#: templates/base/index.html:99
+msgid "أرسل طلبك في أي وقت ومن أي مكان, وسنحاول الرد ومساعدتك."
+msgstr ""
+"Send your request anywhere and anytime, and we will try to respond and help "
+"you."
+
+#: templates/base/index.html:106
+msgid "صور أشعة/تحاليل طبية"
+msgstr "XRay images / Medical analysis"
+
+#: templates/base/index.html:108
+msgid "رفع صور أشعة و تحاليل طبية سابقة."
+msgstr "Upload XRay images and previous medical analysis"
+
+#: templates/base/index.html:115
+msgid "خصوصية عالية"
+msgstr "High Privacy"
+
+#: templates/base/index.html:117
+msgid ""
+"جميع استشاراتك و محادثاتك مع الأطباء سرية للغاية ولا يمكن لأي شخص الوصول "
+"إليها أو قرائتها"
+msgstr ""
+"All your consultations and chats with our doctors are classified and can't "
+"be accessed or read by anyone"
+
+#: templates/base/index.html:132
+msgid "من نحن"
+msgstr "Who Are We"
+
+#: templates/base/index.html:136
+msgid "نحن مجموعة من الأطباء الشباب، من مختلف الدول العربية باختصاصات متنوعة."
+msgstr ""
+"We are a group of doctors, from different Arabian countries with various "
+"specialties."
+
+#: templates/base/index.html:146
+msgid "هدفنا"
+msgstr "Our Goal"
+
+#: templates/base/index.html:150
+msgid ""
+"هدفنا مساعدتك في حل مشاكلك الصحية، وحمايتك من مخاطر تناول الأدوية بدون "
+"استشارة الطبيب."
+msgstr ""
+"Our goal is to help you to solve your medical issues, and protect you from "
+"the risk of taking drugs without doctors consultation."
+
+#: templates/base/index.html:167
+msgid "عدد اﻷطباء"
+msgstr "Our Doctors"
+
+#: templates/base/index.html:178
+msgid "عدد الاختصاصات"
+msgstr "Specialties"
+
+#: templates/base/index.html:189
+msgid "عدد المستخدمين"
+msgstr "Patients Served"
+
+#: templates/base/index.html:204
+msgid "الاختصاصات"
+msgstr "Specialties"
+
+#: templates/base/index.html:207
+msgid " بعض الاختصاصات"
+msgstr "Some of the specialties available"
+
+#: templates/base/index.html:218
+msgid "طب باطني"
+msgstr "Internal medicine"
+
+#: templates/base/index.html:229
+msgid "طب الأسنان"
+msgstr "Dentistry"
+
+#: templates/base/index.html:240
+msgid "طب العيون وجراحتها"
+msgstr "Ophthalmology"
+
+#: templates/base/index.html:251
+msgid "جراحة العظام والمفاصل"
+msgstr "Orthopedic"
+
+#: templates/base/index.html:262
+msgid "الجراحة"
+msgstr "Surgery"
+
+#: templates/base/index.html:273
+msgid "طب الأذن و الأنف و الحنجرة"
+msgstr "E.N.T"
+
+#: templates/base/index.html:286
+msgid "الأطباء"
+msgstr "Doctors"
+
+#: templates/base/index.html:289
+msgid "كادرنا الطبي"
+msgstr "Our medical staff"
+
+#: templates/base/index.html:319
+msgid "الصفحة الشخصية"
+msgstr "Profile"
+
+#: templates/base/index.html:327
+msgid "لا يوجد لدينا أطباء حالياً"
+msgstr "-- We Don't Have Doctors Yet --"
+
+#: templates/base/index.html:347
+msgid "البدأ بتقديم استشارة"
+msgstr "Get started"
+
+#: templates/base/index.html:365
+msgid "اتصل بنا"
+msgstr "Contact Us"
+
+#: templates/base/index.html:368
+msgid "إذا كنت تواجه أي مشكلة في الموقع, يمكنك التواصل معنا وإعلامنا عنها"
+msgstr "If you are facing any problem with the website, contact us"
+
+#: templates/base/index.html:399
+msgid "كتابة الرسالة..."
+msgstr "Write message..."
+
+#: templates/base/index.html:404
+msgid "الاسم"
+msgstr "Full Name"
+
+#: templates/base/request_details.html:17
+#: templates/base/request_details.html:186
+msgid "الرد على الطلب"
+msgstr "Reply to the request"
+
+#: templates/base/request_details.html:25
+msgid "مسح الطلب"
+msgstr "Delete request"
+
+#: templates/base/request_details.html:35
+msgid "اسم المريض:"
+msgstr "Patient's name:"
+
+#: templates/base/request_details.html:43
+msgid "العمر:"
+msgstr "Age:"
+
+#: templates/base/request_details.html:51
+msgid "الجنس:"
+msgstr "Gender:"
+
+#: templates/base/request_details.html:70
+msgid "المشكلة الصحية:"
+msgstr "Medical issue:"
+
+#: templates/base/request_details.html:82
+msgid "تاريخ ظهور المشكلة:"
+msgstr "Beginning date of the problem:"
+
+#: templates/base/request_details.html:94
+msgid "الأعراض:"
+msgstr "Symptoms:"
+
+#: templates/base/request_details.html:111
+msgid "العمليات الجراحية السابقة:"
+msgstr "Previous surgeries"
+
+#: templates/base/request_details.html:123
+msgid "اﻷمراض المزمنة:"
+msgstr "Chronic diseases:"
+
+#: templates/base/request_details.html:135
+msgid "اﻷدوية المتناولة:"
+msgstr "Drugs taken"
+
+#: templates/base/request_details.html:147
+msgid "الحساسيات لدى المريض:"
+msgstr "Patient's allergies"
+
+#: templates/base/request_details.html:158
+msgid "تاريخ طلب الاستشارة"
+msgstr "Date of the consultation"
+
+#: templates/base/request_details.html:169
+msgid "صور أشعة / تحاليل طبية سابقة:"
+msgstr "XRay images / Medical analysis"
+
+#: templates/base/request_details.html:199
+msgid "الرد عبر الإيميل"
+msgstr "Reply through email"
+
+#: templates/base/request_details.html:206
+#: templates/base/request_details.html:211
+#: templates/base/request_details.html:296
+#: templates/base/request_details.html:318
+msgid "الرد عبر الواتساب"
+msgstr "Reply through Whatsapp"
+
+#: templates/base/request_details.html:218
+#: templates/base/request_details.html:340
+msgid "الرد عبر التلغرام"
+msgstr "Reply through Telegram"
+
+#: templates/base/request_details.html:225
+#: templates/base/request_details.html:363
+msgid "الرد عبر الموقع (مباشر)"
+msgstr "Reply through the website (direct)"
+
+#: templates/base/request_details.html:240
+msgid "الرد عبر اﻹيميل"
+msgstr "Reply through email"
+
+#: templates/base/request_details.html:266
+msgid "أدخل الرسالة"
+msgstr "Insert message"
+
+#: templates/base/request_details.html:268
+msgid "أدخل الرسالة..."
+msgstr "Insert message..."
+
+#: templates/base/request_details.html:273
+msgid "أدخل الملفات المرفقة"
+msgstr "Insert attached files"
+
+#: templates/base/request_details.html:305
+#: templates/base/request_details.html:327
+msgid "فتح نافذة واتساب جديدة"
+msgstr "Open a new Whatsapp window"
+
+#: templates/base/request_details.html:349
+msgid "فتح نافذة تلغرام جديدة"
+msgstr "Open a new Telegram window"
+
+#: templates/base/request_details.html:372
+msgid "الرد"
+msgstr "Reply"
+
+#: templates/base/requests_list.html:39
+msgid "تم الرد"
+msgstr "Replied"
+
+#: templates/base/requests_list.html:56
+msgid "لا يوجد طلبات واردة بعد!"
+msgstr "There are no requests yet!"
+
+#: templates/base/rules.html:15
+msgid "شروط استخدام منصة الحكيم للاستشارات الطبية المجانية"
+msgstr "Terms of Use for the Hakeem Platform for Free Medical Consultations"
+
+#: templates/base/rules.html:19
+msgid ""
+"منصة الحكيم للاستشارات الطبية المجانية هي مبادرة خيرية تهدف إلى تسهيل وتوفير "
+"النصائح والاستشارات الطبية المفيدة للمستخدمين وتعزيز التواصل بين الطبيب "
+"والمريض"
+msgstr ""
+"Al-Hakeem Platform for Free Medical Consultations is a charitable initiative "
+"aimed at facilitating and providing helpful medical advice and consultations "
+"to users, as well as enhancing communication between doctors and patients"
+
+#: templates/base/rules.html:24
+msgid ""
+"المنصة تقدم المحتوى والمعلومات بحسن نية وبناء ً على أفضل الممارسات والمعرفة "
+"المتاحة للطبيب المعالج في وقت النشر، ولكنها لا تقدم أي ضمانات صريحة أو ضمنية "
+"لاستخدام الوصفات الطبية المعطاة من الأطباء كورقة رسمية يمكن أن تستخدم في "
+"المؤسسات الحكومية"
+msgstr ""
+"The platform provides content and information in good faith and based on "
+"best practices and the knowledge available to the treating physician at the "
+"time of publication. However, it does not provide any express or implied "
+"guarantees for the use of prescriptions given by doctors as official "
+"documents that can be used in government institutions"
+
+#: templates/base/rules.html:29
+msgid ""
+"لا تتحمل المنصة أي مسؤولية قانونية تجاه المستخدمين أو أي طرف ثالث عن أية "
+"خسائر أو أضرار مباشرة أو غير مباشرة تنجم عن استخدام أو عدم القدرة على "
+"استخدام المنصة أو المحتوى الذي تقدمه المنصة"
+msgstr ""
+"The platform does not assume any legal responsibility towards users or any "
+"third party for any direct or indirect losses or damages resulting from the "
+"use or inability to use the platform or the content provided by the platform"
+
+#: templates/base/rules.html:34
+msgid ""
+"يجب على المستخدمين استشارة الأطباء المختصين بطريقة مباشرة بعيًدا عن المنصات  "
+"الإلكترونية المختلفة في حالة الحاجة إلى وصفة طبية مصرحة أو شهادات طبية آخرى"
+msgstr ""
+"Users must consult specialized doctors directly, separate from various "
+"online platforms, in case they require a valid medical prescription or other "
+"medical certificates"
+
+#: templates/base/rules.html:39
+msgid ""
+"قد تحتوي المنصة على روابط إلى مواقع وخدمات طرف ثالث. لا تتحمل المنصة أي "
+"مسؤولية عن محتوى تلك المواقع أو الخدمات، ويتوجب على المستخدم تحمل المخاطر "
+"الناجمة عن استخدامه لهذه الروابط"
+msgstr ""
+"The platform may contain links to third-party websites and services. The "
+"platform does not assume any responsibility for the content of those "
+"websites or services, and the user is responsible for the risks associated "
+"with using these links"
+
+#: templates/base/rules.html:44
+msgid ""
+"قد يتم تعديل شروط الإستخدام في أي وقت دون إشعار مسبق. يجب على المستخدمين "
+"مراجعة شروط الإستخدام بشكل دوري للتأكد من الامتثال لأحدث إصدار. إن استمرار "
+"استخدام المنصة بعد أي تغيير يعني الموافقة على التغييرات"
+msgstr ""
+"The terms of use may be modified at any time without prior notice. Users are "
+"advised to review the terms of use periodically to ensure compliance with "
+"the latest version. Continued use of the platform after any changes "
+"signifies acceptance of the modifications"
+
+#: templates/base/rules.html:49
+msgid ""
+"استخدام المنصة يعتبر موافقة تلقائية على شروط الاستخدام هذه. يجب على المستخدم "
+"قراءة شروط الاستخدام بعناية قبل استخدام المنصة"
+msgstr ""
+"Using the platform constitutes automatic acceptance of these terms of use. "
+"Users are advised to carefully read the terms of use before using the "
+"platform"
+
+#: templates/chat/inbox.html:9
+msgid "جميع المحادثات"
+msgstr "All conversations"
+
+#: templates/chat/inbox.html:20
+msgid "جميع المحادثات الخاصة بك"
+msgstr "All conversations"
+
+#: templates/chat/inbox.html:80
+msgid "لا يوجد محادثات بعد!"
+msgstr "There are no conversations yet!"
+
+#: templates/chat/thread.html:51 templates/chat/thread.html:67
+msgid "عرض الصفحة الشخصية"
+msgstr "View Profile"
+
+#: templates/chat/thread.html:151
+msgid "Write a message..."
+msgstr ""

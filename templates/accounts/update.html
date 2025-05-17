@@ -1,0 +1,195 @@
+{% extends '_base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block title %}
+{% trans "تعديل حساب المستخدم" %}
+{% endblock title %}
+
+{% block extra_head %}
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.16/css/intlTelInput.css"
+  integrity="sha512-gxWow8Mo6q6pLa1XH/CcH8JyiSDEtiwJV78E+D+QP0EVasFs8wKXq16G8CLD4CJ2SnonHr4Lm/yY2fSI2+cbmw=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
+
+{% endblock extra_head %}
+
+{% block content %}
+
+{{ LANGUAGE_CODE|json_script:"lang" }}
+
+<main class="container mt-3">
+  <h1 {% if not request.user.doctor.profile_pic %}class="text-center"{% endif %}>{% trans "تعديل حساب المستخدم" %}</h1>
+
+  {% include '_messages.html' %}
+
+  <section class="d-flex justify-content-between login__section">
+    {% if request.user.doctor.profile_pic %}
+    <div class="d-flex justify-content-center w-50 login__form-container1">
+      <img
+        src="{{request.user.doctor.profile_pic.url}}.webp"
+        alt="Doctor's Image"
+        class="doctor__img"
+      />
+    </div>
+    {% endif %}
+
+    <div
+      class="d-flex justify-content-center {% if request.user.doctor.profile_pic %}w-50{% else %}w-100{% endif %} my-5 login__form-container2"
+    >
+      <form
+        method="post"
+        id="registerForm"
+        class="register__form"
+        enctype="multipart/form-data"
+      >
+
+      {% if user_form.errors or profile_form.errors %}
+        {% for field in user_form %}
+        {% if field.errors %}
+        {% for error in field.errors %}
+        <div class="alert alert-danger">
+            <svg class="bi flex-shrink-0 mx-2" width="24" height="24" role="img" aria-label="Danger:">
+                <use xlink:href="#exclamation-triangle-fill" />
+            </svg>
+            <strong>{{ error|escape }}</strong>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+
+        {% for field in profile_form %}
+        {% if field.errors %}
+        {% for error in field.errors %}
+        <div class="alert alert-danger">
+            <svg class="bi flex-shrink-0 mx-2" width="24" height="24" role="img" aria-label="Danger:">
+                <use xlink:href="#exclamation-triangle-fill" />
+            </svg>
+            <strong>{{ error|escape }}</strong>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+
+      {% endif %}
+        
+        {% csrf_token %}
+        
+        {% for field in user_form %}
+        <div class="mb-3">
+          {% if field.name != 'phone_error' %}
+          <i class="fa-solid {{ field.field.icon }}"></i>
+          <label for="user_form-{{field.name}}" class="form-label">
+          {{field.label}}
+          </label>
+          <br />
+          {% endif %}
+
+          {% if field.name == 'full_phone' %}
+          <input type="tel" name="user_form-full_phone" id="user_form-full_phone" {% if phone %}value="{{phone}}"{% endif %} class="form-control form__phone" required>
+          
+          {% else %}
+          
+          {% render_field field class="form-control" %}
+          
+          {% endif %}
+        </div>
+
+        {% endfor %}
+        
+        {% for field in profile_form %}
+        <div class="mb-3">
+          <i class="fa-solid {{ field.field.icon }}"></i>
+          <label for="{{field.name}}" class="form-label">{{field.label}}</label>
+          <br />
+
+          {% if field.name == 'old_specialty' or field.name == 'certificate' %}
+          {% render_field field class="form-select" %}
+
+          {% elif field.name == 'country' %}
+
+          <select id="{{field.name|capfirst}}" name="profile_form-{{field.name}}" class='selectpicker w-100' data-live-search='true' required>
+              <option value="{{country}}">
+                {% if LANGUAGE_CODE == 'en' %}
+                {{ countryEN }}
+              {% else %}
+                {{ countryAR }}
+              {% endif %}
+              </option>
+          </select>
+
+          {% else %}
+          {% render_field field class="form-control" %}
+          
+          {% endif %}
+        </div>
+
+        {% if field.name == 'old_specialty' %}
+        <span class="form-text"> {% trans "- أو -" %} </span>
+        {% endif %}
+        
+        {% endfor %}
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary mt-4 px-5">
+            <i class="fa-solid fa-edit"></i>
+            {% trans 'تعديل' %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.16/js/intlTelInput.min.js"
+  integrity="sha512-Po9nSdYOcWIcoADdRjkAbRYPpR8OHjxzA/3RDUERZcDewTLzRTxbG4bUX7Sr7lVEcO3wTCzphdOBWgNFKVmxaA=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+
+<script>
+  let input = document.querySelector("#user_form-full_phone");
+  let iti = window.intlTelInput(input, {
+    utilsScript:
+      "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.16/js/utils.min.js?1638200991544",
+    initialCountry: "auto",
+    geoIpLookup: function (callback) {
+      $.get("https://ipinfo.io", function () {}, "jsonp").always(function (
+        resp
+      ) {
+        var countryCode = resp && resp.country ? resp.country : "sy";
+        callback(countryCode);
+      });
+    },
+  });
+
+  $("#registerForm").submit(function (e) {
+    if (iti.getNumber() == "") {
+      $("#phone_error").val("empty");
+    } else if (/[a-zA-Z]/.test(iti.getNumber())) {
+      $("#phone_error").val("letters");
+    } else if (!iti.isValidNumber()) {
+      $("#phone_error").val("invalid");
+    } else {
+      $("#phone_error").val("");
+      $("#user_form-full_phone").val(iti.getNumber());
+    }
+  });
+</script>
+
+{% endblock extra_scripts %}

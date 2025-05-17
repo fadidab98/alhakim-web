@@ -1,0 +1,212 @@
+{% extends '_base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block title %}
+{% trans "طلب استشارة جديد" %}
+{% endblock title %}
+
+{% block extra_head %}
+
+<script src="{% static 'js/toast.js' %}"></script>
+
+<script>
+    const toasts = new Toasts({
+        offsetX: 30,
+        offsetY: 110,
+        gap: 30,
+        width: 500,
+        timing: "ease",
+        duration: ".8s",
+        position: "top-right",
+    });
+</script>
+
+{% endblock extra_head %}
+
+{% block content %}
+
+<main class="container my-5">
+
+    <section class="row d-flex justify-content-center">
+
+        <div class="col-lg-6 col-md-8">
+            <h2>
+                {% trans "الإستمارة الإلكترونية" %}
+            </h2>
+
+            {% include '_messages.html' %}
+            
+            <form method="post" id="consultForm" data-doctors-url="{% url 'ajax_load_doctors' %}"
+                enctype="multipart/form-data">
+
+                {% if consultation_form.errors or documents_form.errors %}
+
+                {% for field in consultation_form %}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                        <script>
+                            toasts.push({
+                                title: '{% trans "التنبيهات" %}',
+                                content: '{{ field.label }} - {{ error|escape }}',
+                                style: 'error',
+                                dismissAfter: "5s"
+                            });
+                        </script>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+                {% endif %}
+
+                {% for field in documents_form %}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                        <script>
+                            toasts.push({
+                                title: '{% trans "التنبيهات" %}',
+                                content: '{{ field.label }} - {{ error|escape }}',
+                                style: 'error',
+                                dismissAfter: "5s"
+                            });
+                        </script>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+                {% csrf_token %}
+
+                {% for field in consultation_form %}
+                <div class="mb-3">
+
+                <label for="{{field.name}}" class="form-label">{{ field.label }} {% if field.field.required %}*{% endif %}</label>                   
+
+                {% if field.name == 'symptoms' %}
+                    {% for symptom in field %}
+                    {% if forloop.counter0 != 0 %}
+                    <div class="form-check">
+                        {{symptom}}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+
+                {% elif field.name == 'reply_via' %}
+                    {% for reply in field %}
+                    <div class="d-flex align-items-start gap-2">
+                        <div class="form-check">
+                            {{reply}}
+                        </div>
+
+                        {% if reply.id_for_label == "id_consultation_form-reply_via_1" %}
+                            <small class="text-primary">
+                                * ( {% trans "المفضلة" %} )
+                            </small>
+                        {% elif reply.id_for_label == "id_consultation_form-reply_via_2" %}
+                        <small class="text-danger">
+                            {% trans "جديد" %}
+                        </small>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                {% elif field.name == 'specialty' or field.name == 'doctor' %}
+                    {% render_field field class="form-select" %}
+
+                {% else %}
+                    {% render_field field class="form-control" %}
+                {% endif %}
+
+                {% if field.name == 'email' %}
+                <div id="emailHelp" class="form-text">
+                    {% trans "إذا تريد أن نتواصل معك عبر الإيميل, الرجاء تعبئة حقل الإيميل" %}
+                </div>
+
+                {% elif field.name == 'chronic_diseases' %}
+                <div id="specialtyHelp" class="form-text">
+                    {% trans "أمراض قلب وأوعية دموية, سكري, ضغط, أمراض الكلى, أمراض الكبد, جلطات قلبية ودماغية..." %}
+                </div>
+                
+                {% elif field.name == 'specialty' %}
+                    <div id="specialtyHelp" class="form-text">
+                        {% trans "تحديد الاختصاص يساعدنا على الرد بسرعة" %}
+                    </div>
+                
+                {% elif field.name == 'reply_via' %}
+                    <div id="replyViaHelp" class="form-text">
+                        {% trans "قم باختيار الطريقة/الطرق التي يمكننا من خلالها الرد على طلب الإستمارة الخاص بك" %}
+                        <br>
+                        {% trans 'لضمان سرعة الرد على استفساراتكم، قم بتحديد عدة طرق للتواصل!' %}
+                    </div>
+
+                {% endif %}
+
+                </div>
+                {% endfor %}
+
+                {% for field in documents_form %}
+                <div class="mb-3">
+                    <label for="{{field.name}}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.name == 'document' %}
+                    <div id="documentHelp" class="form-text">
+                        {% trans "يمكن إضافة عدة ملفات" %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="form-check form-switch my-5">
+                    <input class="form-check-input" type="checkbox" role="switch" required id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">
+                        {% trans "باستخدام هذه الخدمة، أنا أوافق على " %}
+                        <a href="{% url "base:rules" %}" target="_blank">
+                            {% trans "الشروط والأحكام" %}
+                        </a>
+                    </label>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary custom__btn w-100">
+                    {% trans "إرسال" %}
+                </button>
+            </form>
+        </div>
+    </section>
+</main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+<script async>
+    $("#id_consultation_form-specialty").change(function () {
+        const url = $("#consultForm").attr("data-doctors-url");
+        let specialityID = $(this).val();
+        specialityID == '' ? specialityID = -1 : specialityID = specialityID
+
+        $.ajax({
+            url: url,
+            data: {
+                'specialty_id': specialityID
+            },
+            success: function (data) {
+                $("#id_consultation_form-doctor").html(
+                    data);
+            }
+        });
+
+    });
+
+    $('#id_consultation_form-reply_via_0').prop('disabled', true);
+
+    $('#id_consultation_form-email').on('input', function() {
+        var email = $(this).val();
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+        if (email != '' && emailRegex.test(email)) {
+            $('#id_consultation_form-reply_via_0').prop('disabled', false);
+        }
+      });
+</script>
+{% endblock extra_scripts %}

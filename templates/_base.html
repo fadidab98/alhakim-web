@@ -1,0 +1,164 @@
+{% load static %}
+{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<!DOCTYPE html>
+
+{% if LANGUAGE_CODE == 'ar' %}
+<html lang="ar" dir="rtl">
+{% else %}
+<html lang="en" dir="ltr">
+{% endif %}
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+
+        <title>
+          {% block title %}
+          {% endblock title %}
+        </title>
+
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+            crossorigin="anonymous"
+        />
+
+        {% if LANGUAGE_CODE == 'en' %}
+        <link
+            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"
+            as="style"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"
+        />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/style_en.css' %} "
+        />
+        {% else %}
+        <link
+            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap"
+            as="style"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap"
+        />
+        {% endif %}
+        <link
+            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@700&display=swap"
+            as="style"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@700&display=swap"
+        />
+
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/style.css' %} "
+        />
+
+        <link
+            rel="shortcut icon"
+            href="{% static 'images/favicon.ico' %}"
+            type="image/x-icon"
+        />
+
+        <!-- Google tag (gtag.js) -->
+        <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-KYVZBT048N"
+        ></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+
+            gtag("config", "G-KYVZBT048N");
+        </script>
+
+        <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6649196712661613"
+            crossorigin="anonymous"
+        ></script>
+
+        <link type="text/css" rel="stylesheet" href="{% static 'css/toast.css' %}" />
+        
+        {% block extra_head %}
+        {% endblock extra_head %}
+    </head>
+
+    <body>
+        {% include '_header.html' %}
+        
+        {% block content %}
+        {% endblock content %}
+
+        <div class="chat__container">
+            <a
+                href="{% url 'chat:messages_list' %}"
+                class="btn btn-primary position-relative"
+            >
+                <i class="fas fa-message fa-xl text-white"></i>
+                {% if chat_count is not None %}
+                <span
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    id="chat-count"
+                >
+                    {{ chat_count }}
+                </span>
+                {% endif %}
+                <span class="sr-only"> Chat Count </span>
+            </a>
+        </div>
+
+        <div id="preloader"></div>
+
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+            integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"
+        ></script>
+
+        <script
+            src="https://kit.fontawesome.com/fd7d832d37.js"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            type="text/javascript"
+            src="{% static 'js/purecounter.js' %}"
+        ></script>
+        <script
+            type="text/javascript"
+            src="{% static 'js/main.js' %}"
+        ></script>
+
+        {% block extra_scripts %}
+        {% endblock extra_scripts %}
+    </body>
+</html>

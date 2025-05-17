@@ -1,0 +1,177 @@
+{% extends "_base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load cloudinary %}
+
+
+{% block content %}
+
+<section class="container-fluid mb-5 mt-3">
+    <div class="row justify-content-center h-100 px-md-3">
+        <div class="col-12 col-md-6 mx-auto">
+            <div class="card mx-auto">
+                <div class="card-header bg-transparent d-flex">
+                    {% if user != object.first %} 
+                    {% if object.first.is_doctor and object.first.profile_doctor.profile_pic %}
+                    {% cloudinary object.first.profile_doctor.profile_pic.name alt="User Logo" class="chat__icon" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                    {% else %}
+                    {% cloudinary "Assets/user_yyxue1" class="chat__icon" alt="User Logo" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                    {% endif %}
+                    {% if LANGUAGE_CODE == 'en' %}
+                    <div class="my-auto px-3 fs-4">
+                        {{ object.first.name_en }}
+                    </div>
+                    {% else %}
+                    <div class="my-auto px-3 fs-4">
+                        {{ object.first.profile_doctor.name_ar }}
+                    </div>
+                    {% endif %} 
+                    {% else %}
+                    {% if object.second.is_doctor and object.second.profile_doctor.profile_pic %}
+                    {% cloudinary object.second.profile_doctor.profile_pic.name alt="User Logo" class="chat__icon" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                    {% else %}
+                    {% cloudinary "Assets/user_yyxue1" class="chat__icon" alt="User Logo" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                    {% endif %}
+                    <div class="my-auto px-3 fs-4">
+                        {{ object.second.name_en }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if user != object.first %}
+                    {% if object.first.is_doctor %}
+                    <div class="my-auto">
+                        <div class="dropdown">
+                            <span class="dropdown-toggle pt-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            </span>
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a href="{{object.first.profile_doctor.get_absolute_url}}" class="dropdown-item" type="button">
+                                    {% trans 'عرض الصفحة الشخصية' %}
+                                </a>
+                            </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    {% if object.second.is_doctor %}
+                    <div class="my-auto">
+                        <div class="dropdown">
+                            <span class="dropdown-toggle pt-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            </span>
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a href="{{object.second.get_absolute_url}}" class="dropdown-item" type="button">
+                                    {% trans 'عرض الصفحة الشخصية' %}
+                                </a>
+                            </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}                        
+                    {% endif %}
+
+                </div>
+                <div class="card-body p-4" id="chat-items">
+
+                    {% for chat in object.chatmessage_set.all %}
+                    {% if user == chat.user %}
+                    <div class="d-flex align-items-baseline mb-3">
+                        <div>
+                            {% if chat.user.is_doctor and chat.user.profile_doctor.profile_pic %}
+                            {% cloudinary chat.user.profile_doctor.profile_pic.name alt="User Logo" class="chat__icon" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                            {% else %}
+                            {% cloudinary "Assets/user_yyxue1" class="chat__icon" alt="User Logo" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                            {% endif %}
+                        </div>
+                        <div class="pe-2 my-auto">
+                            <div class="card d-inline-block p-2 px-3 m-2">
+                                {% if chat.message %}
+                                {{ chat.message }}
+                                {% else %}
+                                <a href="{% if chat.attached_file %}{{chat.attached_file.url}}{% endif %}" target="_blank">
+                                    <i class="fas fa-file px-2"></i>
+                                    {{chat.filename}}
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="d-flex align-items-baseline text-end justify-content-end mb-4">
+                        <div class="pe-2 my-auto">
+                            <div class="card d-inline-block p-2 px-3 m-2">
+                                {% if chat.message %}
+                                {{ chat.message }}
+                                {% else %}
+                                <a href="{% if chat.attached_file %}{{chat.attached_file.url}}{% endif %}" target="_blank">
+                                    {{chat.filename}}
+                                    <i class="fas fa-file px-2"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div>
+                            {% if chat.user.is_doctor and chat.user.profile_doctor.profile_pic %}
+                            {% cloudinary chat.user.profile_doctor.profile_pic.name class="chat__icon" alt="User Logo" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                            {% else %}
+                            {% cloudinary "Assets/user_yyxue1" class="chat__icon" alt="User Logo" fetch_format="webp" quality="auto:eco" width=60 height=60 crop="scale" sign_url=True %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="card-footer bg-white m-0 p-1">
+                    <div class="form-group mt-3 px-3 file__upload-progress" id="progress-div">
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated file__upload-progress-line" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-text bg-transparent border-0 message__box-1">
+                            <form method="post" enctype="multipart/form-data" id="upload_form">
+                                {% csrf_token %}
+
+                                {% for field in file_form %}
+                                    {% render_field field class="d-none" %}
+                                {% endfor %}
+                                
+                                <button class="btn btn-light text-secondary" id="attach-file-button">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="my-auto message__box-2">
+                            <form id='message_form' method='POST'>
+                                {% csrf_token %}
+                                <div class="form-group custom__chat-msg-input-group">
+                                    <textarea class="form-control" id="id_message" placeholder="{% trans 'Write a message...' %}" required></textarea>
+                                </div>
+                                {% if user != object.first %}
+                                {{ object.first.id|json_script:'uid' }}
+                                {% else %}
+                                {{ object.second.id|json_script:'uid' }}
+                                {% endif %}
+                                <input type="submit" value="Send" class="d-none" id="send-message-hidden-button">
+                            </form>
+                        </div>
+                        <div class="input-group-text bg-transparent border-0  message__box-3">
+                            <button class="btn btn-light text-secondary" id="send-message-button">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script async src="{% static 'js/chat.js' %}" type="text/javascript"></script>
+{% endblock extra_scripts %}

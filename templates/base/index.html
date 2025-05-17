@@ -1,0 +1,467 @@
+{% extends '_base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load mathfilters %}
+{% load cloudinary %}
+
+{% block title %}
+{% trans " منصة الحكيم للاستشارات الطبية" %}
+{% endblock title %}
+
+{% block extra_head %}
+<link media="print" onload="this.media='all'" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+{% endblock extra_head %}
+
+{% block content %}
+
+<section id="hero" class="d-flex align-items-center my-0">
+    <div class="container">
+        <h1>
+            {% trans "أهلا بك في موقع الحكيم" %}
+        </h1>
+        <br>
+        <h2>
+            {% trans "للاستشارات الطبية المجانية عبر الانترنت" %}
+        </h2>
+        
+        {% if request.user.is_anonymous %}
+
+        <a href="{% url 'accounts:register_patient' %}" class="home__consult-btn" id="home__consult-btn1">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            {% trans "إنشاء حساب مريض جديد" %}
+        </a>
+
+        <a href="{% url 'accounts:register_doctor' %}" class="home__consult-btn" id="home__consult-btn2">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            {% trans "انضم لفريقنا" %}
+        </a>
+            
+        {% endif %}
+
+        <br>
+        
+        <a href="{% url 'base:consult' %}" class="home__consult-btn my-0" id="home__consult-btn4">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            {% trans "استشارة" %}
+        </a>
+
+    </div>
+</section>
+
+<main id="main">
+    <section id="why-us" class="why-us">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 d-flex align-items-stretch">
+                    <div class="content">
+                        <h3>
+                            {% trans "لماذا نحن!" %}
+                        </h3>
+                        <p>
+                            {% trans "فريقنا الطبي جاهز لمساعدتك دائماً!" %}
+                            <br>
+                            {% trans "اطلب استشارة مجانية من منزلك وعلى جهازك بكل سهولة." %}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-9 d-flex align-items-stretch">
+                    <div class="icon-boxes d-flex flex-column justify-content-center">
+                        <div class="row">
+                            <div class="col-xl-3 d-flex align-items-stretch">
+                                <div class="icon-box mt-4 mt-xl-0">
+                                    <i class="bi bi-coin"></i>
+                                    <h4>
+                                        {% trans "استشارة مجانية" %}
+                                    </h4>
+                                    <p>
+                                        {% trans "طلب استشارة طبية مجانية بالكامل من خلال هذه المنصة." %}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 d-flex align-items-stretch">
+                                <div class="icon-box mt-4 mt-xl-0">
+                                    <i class="bi bi-clock-history"></i>
+                                    <h4>
+                                        {% trans "دعم 24/7" %}
+                                    </h4>
+                                    <p>
+                                        {% trans "أرسل طلبك في أي وقت ومن أي مكان, وسنحاول الرد ومساعدتك." %}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 d-flex align-items-stretch">
+                                <div class="icon-box mt-4 mt-xl-0">
+                                    <i class="bi bi-file-earmark-arrow-up"></i>
+                                    <h4>{% trans "صور أشعة/تحاليل طبية" %}</h4>
+                                    <p>
+                                        {% trans "رفع صور أشعة و تحاليل طبية سابقة." %}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 d-flex align-items-stretch">
+                                <div class="icon-box mt-4 mt-xl-0 shiny">
+                                    <i class="bi bi-file-earmark-arrow-up"></i>
+                                    <h4>{% trans "خصوصية عالية" %}</h4>
+                                    <p class='text-white'>
+                                        {% trans "جميع استشاراتك و محادثاتك مع الأطباء سرية للغاية ولا يمكن لأي شخص الوصول إليها أو قرائتها" %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about-us" class="about-us">
+        <div class="container pt-5">
+            <div class="section-title">
+                <h2>
+                    {% trans "من نحن" %}
+                </h2>
+            </div>
+            <h5 class="text-center">
+                {% trans "نحن مجموعة من الأطباء الشباب، من مختلف الدول العربية باختصاصات متنوعة." %}
+            </h5>
+        </div>
+        </div>
+    </section>
+
+    <section id="our-goal">
+        <div class="container pt-5">
+            <div class="section-title">
+                <h2>
+                    {% trans "هدفنا" %}
+                </h2>
+            </div>
+            <h5 class="text-center">
+                {% trans "هدفنا مساعدتك في حل مشاكلك الصحية، وحمايتك من مخاطر تناول الأدوية بدون استشارة الطبيب." %}
+            </h5>
+        </div>
+        </div>
+    </section>
+
+    <section id="counts" class="counts">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-4 col-md-8">
+                    <div class="count-box">
+                        <i class="fas fa-user-md"></i>
+                        <span data-purecounter-start="0" data-purecounter-end="{{doctors_count}}"
+                            data-purecounter-duration="1" class="purecounter"></span>
+                        <p>
+                            {% trans "عدد اﻷطباء" %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-8 mt-5 mt-md-0">
+                    <div class="count-box">
+                        <i class="far fa-hospital"></i>
+                        <span data-purecounter-start="0" data-purecounter-end="{{specialty_count}}"
+                            data-purecounter-duration="1" class="purecounter"></span>
+                        <p>
+                            {% trans "عدد الاختصاصات" %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-8 mt-5 mt-lg-0">
+                    <div class="count-box">
+                        <i class="fas fa-user"></i>
+                        <span data-purecounter-start="0" data-purecounter-end="{{consultation_count}}"
+                            data-purecounter-duration="1" class="purecounter"></span>
+                        <p>
+                            {% trans "عدد المستخدمين" %}
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container pt-5">
+
+            <div class="section-title">
+                <h2>
+                    {% trans "الاختصاصات" %}
+                </h2>
+                <p>
+                    {% trans " بعض الاختصاصات" %}
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" style="cursor: pointer;" onclick="location.href='{% url "base:consult" %}';">
+                    <div class="icon-box">
+                        <div class="icon">
+                            {% cloudinary "Assets/anatomy_ilavy6.webp" alt="sp1" loading="lazy" style="filter: invert(0%); object-fit: cover;" fetch_format="webp" quality="auto:eco" width=60 height=60 sign_url=True %}
+                        </div>
+                        <h4>
+                            {% trans "طب باطني" %}
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" style="cursor: pointer;" onclick="location.href='{% url "base:consult" %}';">
+                    <div class="icon-box">
+                        <div class="icon">
+                            {% cloudinary "Assets/tooth_qdqner.webp" alt="sp2" loading="lazy" style="object-fit: cover;" fetch_format="webp" quality="auto:eco" width=60 height=60 sign_url=True %}
+                        </div>
+                        <h4>
+                            {% trans "طب الأسنان" %}
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" style="cursor: pointer;" onclick="location.href='{% url "base:consult" %}';">
+                    <div class="icon-box">
+                        <div class="icon">
+                            {% cloudinary "Assets/eye_z9k93m.webp" alt="sp3" loading="lazy" style="object-fit: cover;" fetch_format="webp" quality="auto:eco" width=60 height=60 sign_url=True %}
+                        </div>
+                        <h4>
+                            {% trans "طب العيون وجراحتها" %}
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" style="cursor: pointer;" onclick="location.href='{% url "base:consult" %}';">
+                    <div class="icon-box">
+                        <div class="icon">
+                            {% cloudinary "Assets/bone_uomzac.webp" alt="sp4" loading="lazy" style="object-fit: cover;" fetch_format="webp" quality="auto:eco" width=60 height=60 sign_url=True %}
+                        </div>
+                        <h4>
+                            {% trans "جراحة العظام والمفاصل" %}
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" style="cursor: pointer;" onclick="location.href='{% url "base:consult" %}';">
+                    <div class="icon-box">
+                        <div class="icon">
+                            {% cloudinary "Assets/surgery_dalq2g.webp" alt="sp5" loading="lazy" style="object-fit: cover;" fetch_format="webp" quality="auto:eco" width=60 height=60 sign_url=True %}
+                        </div>
+                        <h4>
+                            {% trans "الجراحة" %}
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" style="cursor: pointer;" onclick="location.href='{% url "base:consult" %}';">
+                    <div class="icon-box">
+                        <div class="icon">
+                            {% cloudinary "Assets/ear_dv0gzb.webp" alt="sp6" loading="lazy" style="object-fit: cover;" fetch_format="webp" quality="auto:eco" width=60 height=60 sign_url=True %}
+                        </div>
+                        <h4>
+                            {% trans "طب الأذن و الأنف و الحنجرة" %}
+                        </h4>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section id="doctors">
+        <div class="container section-title pt-5">
+            <h2>
+                {% trans "الأطباء" %}
+            </h2>
+            <p>
+                {% trans "كادرنا الطبي" %}
+            </p>
+        </div>
+        <div class="swiper mySwiper pb-5">
+            <div class="swiper-wrapper">
+
+                {% for doctor in doctors %}
+                <div class="swiper-slide" style="max-width: 270px;">
+                    <div class="card testimonial-card mt-2 mb-3" >
+                        <div class="card-up aqua-gradient"></div>
+                        <div class="avatar mx-auto white">
+                            {% if doctor.profile_pic %}
+                            {% cloudinary doctor.profile_pic.name alt="User Logo" loading="lazy" class="rounded-circle img-fluid" style="object-fit: cover;" fetch_format="webp" quality="auto:good" width=200 height=200 crop="fill" sign_url=True %}
+                            {% else %}
+                            {% cloudinary "Assets/user_yyxue1.webp" alt="User Logo" loading="lazy" class="rounded-circle img-fluid" fetch_format="webp" quality="auto:eco" width=150 height=150 crop="scale" sign_url=True %}
+                            {% endif %}
+                        </div>
+                        <div class="card-body text-center">
+                            <h4 class="card-title font-weight-bold">
+                                {% if LANGUAGE_CODE == 'en' %}
+                                {{ doctor.user.name_en }}
+                                {% else %}
+                                {{ doctor.name_ar }}
+                                {% endif %}
+                            </h4>
+                            <h6 class="card-title">
+                                {{ doctor.speciality }}
+                            </h6>
+                            <hr>
+                            <a href="{{doctor.get_absolute_url}}" class="btn btn-primary">
+                                {% trans "الصفحة الشخصية" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="container py-3">
+                    <h3 class="text-center">
+                        {% trans "لا يوجد لدينا أطباء حالياً" %}
+                    </h3>
+                </div>
+                {% endfor %}
+
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <section id="appointment" class="appointment section-bg">
+        <div class="container py-5">
+
+            <div class="section-title">
+                <h2>
+                    {% trans "استشارة" %}
+                </h2>
+                <p>
+                    {% trans "البدأ بتقديم استشارة" %}
+                </p>
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'base:consult' %}" class="btn btn-primary custom__btn">
+                    {% trans "استشارة" %}
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container pt-5">
+
+            <div class="section-title">
+                <h2>
+                    {% trans "اتصل بنا" %}
+                </h2>
+                <p>
+                    {% trans "إذا كنت تواجه أي مشكلة في الموقع, يمكنك التواصل معنا وإعلامنا عنها" %}
+                </p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row my-5 d-flex justify-content-center">
+
+                <div class="col-lg-8 mt-5 mt-lg-0">
+
+                    {% include '_messages.html' %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <div class="alert alert-danger my-2">
+                                <svg class="bi flex-shrink-0 mx-2" width="24" height="24" role="img" aria-label="Danger:">
+                                    <use xlink:href="#exclamation-triangle-fill" />
+                                </svg>
+                                <strong>{{field.label}} - {{ error|escape }}</strong>
+                            </div>
+                            {% endfor %}
+                            {% endfor %}
+                            {% endif %}
+                        <div class="row">
+                            {% for field in form %}
+
+                            {% if field.name == 'message' %}
+                            <div class="form-group mt-3">
+                                {% trans 'كتابة الرسالة...' as messge_trans %}
+                                {% render_field field class="form-control" rows=5 placeholder=messge_trans required="true" %}
+                            </div>
+                            {% elif field.name == "name" %}
+                            <div class="col-md-6 form-group">
+                                {% trans 'الاسم' as name_trans %}
+                                {% render_field field class="form-control" placeholder=name_trans required="true" %}
+                            </div>
+                            {% elif field.name == "email" %}
+                            <div class="col-md-6 form-group mt-3 mt-md-0">
+                                {% trans 'الإيميل' as email_trans %}
+                                {% render_field field class="form-control" placeholder=email_trans required="true" %}
+                            </div>
+                            {% else %}
+                            <div class="mt-2">
+                                {% render_field field required="true" %}
+                            </div>
+                            {% endif %}
+
+                            {% endfor %}
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary w-50 mt-4">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                {% trans "إرسال" %}
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<script async>
+    let i = Math.ceil({{ doctors_count|div:2 }})
+    var swiper = new Swiper(".mySwiper", {
+        effect: "coverflow",
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        initialSlide: i,
+        coverflowEffect: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+</script>
+
+{% endblock extra_scripts %}

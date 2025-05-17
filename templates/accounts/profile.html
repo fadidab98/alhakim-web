@@ -1,0 +1,119 @@
+{% extends '_base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load cloudinary %}
+
+{% block title %}
+{% trans 'الحساب الشخصي' %} - 
+{% if LANGUAGE_CODE == 'en' %}
+{{ doctor.user.name_en }}
+{% else %}
+{{doctor.name_ar}}
+{% endif %}
+
+{% endblock title %}
+
+{% block content %}
+
+<div class="page-content page-container" id="page-content">
+  <div class="padding">
+    <div class="row container-fluid d-flex justify-content-center">
+      <div class="col-xl-12 col-md-12">
+        <div class="card user-card-full">
+          <div class="row m-l-0 m-r-0">
+            <div class="col-sm-3 bg-c-lite-green user-profile">
+              <div class="card-block text-center text-white">
+                <div class="m-b-25">
+                  {% if doctor.profile_pic %}
+                  {% cloudinary doctor.profile_pic.name class="img-radius" alt="User Image" fetch_format="webp" quality="auto:best" width=170 height=170 crop="fill" sign_url=True %}
+                  {% endif %}
+                </div>
+                <h2 class="f-w-600">
+                  {% if LANGUAGE_CODE == 'en' %}
+                  {{ doctor.user.name_en }}
+                  {% else %}
+                  {{ doctor.name_ar }}
+                  {% endif %}
+                </h2>
+
+                {% if doctor.specialty %}
+                  {% if LANGUAGE_CODE == 'en' %}
+                    <h4>{{ doctor.specialty.name_en }}</h4>
+                  {% else %}
+                  <h4>{{ doctor.specialty.name_ar }}</h4>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="card-block">
+                <h3 class="m-b-20 p-b-5 b-b-default f-w-600">
+                  {% trans "المعلومات" %}
+                </h3>
+                <div class="row">
+                  {% if doctor.country %}
+                  <div class="col-sm-7">
+                    <h4 class="m-b-10 f-w-600">{% trans "مكان العمل" %}</h4>
+                    <h4 class="text-muted f-w-400">
+                      <i class="fa-solid fa-globe"></i>
+                      {% if LANGUAGE_CODE == 'en' %}
+                      {{countryEN}} - {{ doctor.city_en }}
+                      {% else %}
+                      {{countryAR}} - {{ doctor.city_ar }}
+                      {% endif %}
+
+                      <br />
+
+                      {% if doctor.work_location_en %}
+                      <i class="fa fa-location-pin h4 mt-3"></i>
+                      {% if LANGUAGE_CODE == 'en' %}
+                      {{ doctor.work_location_en }}
+                      {% else %}
+                      {{ doctor.work_location_ar }}
+                      {% endif %}
+                      <br />
+                      {% endif %}
+                    </h4>
+                  </div>
+                  {% endif %}
+                </div>
+
+                {% if doctor.cv %}
+                <a
+                  href="{{doctor.cv.url}}"
+                  class="btn btn-primary shadow w-50 d-block mx-auto mt-4"
+                  target="_blank"
+                >
+                  <i class="fas fa-file px-2"></i>
+                  {% trans "السيرة الذاتية" %}
+                </a>
+                {% endif %}
+
+                {% if doctor.bio_en %}
+                <h3 class="m-b-10 m-t-40 p-b-5 b-b-default f-w-600">
+                  <i class="fas fa-info-circle"></i>
+                  {% trans "لمحة عن الطبيب" %}
+                </h3>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <p class="m-b-10 f-w-600">
+                      {% if LANGUAGE_CODE == 'en' %}
+                      {{ doctor.bio_en }}
+                      {% else %}
+                      {{ doctor.bio_ar }}
+                      {% endif %}
+                    </p>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

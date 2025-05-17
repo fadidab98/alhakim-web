@@ -1,0 +1,47 @@
+{% load i18n %}
+{% load static %}
+
+{% block extra_head %}
+
+<script src="{% static 'js/toast.js' %}"></script>
+
+<script>
+    const toasts = new Toasts({
+        offsetX: 30,
+        offsetY: 110,
+        gap: 30,
+        width: 500,
+        timing: "ease",
+        duration: ".8s",
+        position: "top-right",
+    });
+</script>
+
+{% endblock extra_head %}
+
+{% if messages %}
+    {% for message in messages %}
+
+        {% if message.tags == 'success' %}
+        <script>
+            toasts.push({
+                title: '{% trans "التنبيهات" %}',
+                content: '{{message}}',
+                style: 'success',
+                dismissAfter: "5s"
+            });
+        </script>
+        {% else %}
+        <script>
+            toasts.push({
+                title: '{% trans "التنبيهات" %}',
+                content: '{{message}}',
+                style: 'error',
+                dismissAfter: "5s"
+            });
+        </script>
+        {% endif %}
+
+
+    {% endfor %}
+{% endif %}
