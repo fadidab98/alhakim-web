@@ -69,9 +69,9 @@ pipeline {
                     sshagent(credentials: ['jenkins-key']) {
                         withCredentials([usernamePassword(credentialsId: 'CR_PAT', usernameVariable: 'CR_USER', passwordVariable: 'CR_PASS')]) {
                             script {
-                                sh 'ls -la nginx.conf docker-compose.yaml || echo "Files missing"'
+                                sh 'ls -la docker-compose.yaml || echo "Files missing"'
                                 sh """
-                                    scp -o StrictHostKeyChecking=no nginx.conf docker-compose.yaml \
+                                    scp -o StrictHostKeyChecking=no  docker-compose.yaml \
                                     ${env.SERVER_USER}@${env.SERVER_HOST}:${env.REMOTE_DIR}/
                                 """
                                 sh """
@@ -81,7 +81,7 @@ pipeline {
                                     ls -l /var/run/docker.sock; \
                                     mkdir -p ${env.REMOTE_DIR} && \
                                     cd ${env.REMOTE_DIR} && \
-                                    ls -l nginx.conf docker-compose.yaml; \
+                                    ls -l  docker-compose.yaml; \
                                     echo '${CR_PASS}' | docker login ghcr.io -u '${CR_USER}' --password-stdin && \
                                     docker-compose -f docker-compose.yaml down || true && \
                                     docker-compose -f docker-compose.yaml up -d && \
