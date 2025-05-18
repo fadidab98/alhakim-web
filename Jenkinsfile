@@ -94,7 +94,7 @@ pipeline {
                                     ls -l docker-compose.yaml && \
                                     docker login ghcr.io -u '${CR_USER}' --password '\${CR_PASS}' && \
                                     docker-compose -f docker-compose.yaml down || true && \
-                                    docker-compose -f docker-compose.yaml up -d && \
+                                    docker-compose -f docker-compose.yaml up -d --build && \
                                     docker-compose exec -T web python manage.py migrate && \
                                     echo 'Deployment succeeded'"
                                 """
