@@ -18,7 +18,7 @@ pipeline {
                     git branch: 'master', credentialsId: 'jenkins', url: 'https://github.com/fadidab98/alhakim-web.git'
                 }
             }
-        }
+        } 
  
         stage('Debug Workspace') {
             agent any
