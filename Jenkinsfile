@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-
+ 
         stage('Debug Workspace') {
             agent any
             steps {
