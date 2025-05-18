@@ -18,8 +18,8 @@ pipeline {
                     git branch: 'master', credentialsId: 'jenkins', url: 'https://github.com/fadidab98/alhakim-web.git'
                 }
             }
-        } 
- 
+        }
+
         stage('Debug Workspace') {
             agent any
             steps {
@@ -69,24 +69,34 @@ pipeline {
                     sshagent(credentials: ['jenkins-key']) {
                         withCredentials([usernamePassword(credentialsId: 'CR_PAT', usernameVariable: 'CR_USER', passwordVariable: 'CR_PASS')]) {
                             script {
-                                sh 'ls -la docker-compose.yaml || echo "Files missing"'
-                                sh """
-                                    scp -o StrictHostKeyChecking=no  docker-compose.yaml \
-                                    ${env.SERVER_USER}@${env.SERVER_HOST}:${env.REMOTE_DIR}/
-                                """
+                                // Verify local files
+                                sh 'ls -la docker-compose.yaml || { echo "docker-compose.yaml missing"; exit 1; }'
+                                
+                                // Create remote directory first
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${env.SERVER_USER}@${env.SERVER_HOST} \
-                                    "groups; \
-                                    sudo systemctl status nginx; \
-                                    ls -l /var/run/docker.sock; \
-                                    mkdir -p ${env.REMOTE_DIR} && \
+                                    "mkdir -p ${env.REMOTE_DIR} && chmod 755 ${env.REMOTE_DIR}"
+                                """
+                                
+                                // Copy docker-compose.yaml
+                                sh """
+                                    scp -o StrictHostKeyChecking=no docker-compose.yaml \
+                                    ${env.SERVER_USER}@${env.SERVER_HOST}:${env.REMOTE_DIR}/
+                                """
+                                
+                                // Deploy and run docker-compose
+                                sh """
+                                    ssh -o StrictHostKeyChecking=no ${env.SERVER_USER}@${env.SERVER_HOST} \
+                                    "groups && \
+                                    sudo systemctl status nginx && \
+                                    ls -l /var/run/docker.sock && \
                                     cd ${env.REMOTE_DIR} && \
-                                    ls -l  docker-compose.yaml; \
-                                    echo '${CR_PASS}' | docker login ghcr.io -u '${CR_USER}' --password-stdin && \
+                                    ls -l docker-compose.yaml && \
+                                    docker login ghcr.io -u '${CR_USER}' --password '\${CR_PASS}' && \
                                     docker-compose -f docker-compose.yaml down || true && \
                                     docker-compose -f docker-compose.yaml up -d && \
-                                    docker-compose exec web python manage.py migrate
-                                    echo 'Direct copy succeeded'; }"
+                                    docker-compose exec -T web python manage.py migrate && \
+                                    echo 'Deployment succeeded'"
                                 """
                             }
                         }
