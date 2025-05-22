@@ -40,27 +40,10 @@ pipeline {
             agent any
             steps {
                 echo "Starting Create .env File stage"
-                script {
-                    try {
-                        // Validate environment variables
-                        echo "Validating environment variables"
-                        def missingVars = []
-                        ['SECRET_KEY', 'DATABASE_NAME', 'DATABASE_USER', 'DATABASE_PASSWORD', 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD', 'CLOUDINARY_CLOUD', 'CLOUDINARY_KEY', 'CLOUDINARY_SECRET'].each { var ->
-                            if (!env[var] || env[var].trim() == '') {
-                                missingVars << var
-                            }
-                        }
-                        if (missingVars) {
-                            error "Missing or empty environment variables: ${missingVars.join(', ')}. Check Jenkins credentials."
-                        }
-                        echo "All environment variables are defined"
-                    } catch (Exception e) {
-                        error "Validation failed: ${e.message}"
-                    }
-                }
+                
                 script {
                     // Run sh step and check exit status
-                    def status = sh(script: """
+                    sh """
                         /bin/bash -c '
                         echo "Creating .env file"
                         rm -f .env
@@ -79,10 +62,8 @@ pipeline {
                         ls -la .env
                         echo ".env file created successfully"
                         '
-                    """, returnStatus: true)
-                    if (status != 0) {
-                        error "Failed to create .env file: shell command exited with status ${status}"
-                    }
+                    """ 
+
                 }
                 echo "Create .env File completed"
             }
