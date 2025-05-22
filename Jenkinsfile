@@ -42,30 +42,35 @@ pipeline {
         stage('Create .env File') {
             agent any
             steps {
-                echo "DEBUG: SECRET_KEY=${params.SECRET_KEY}"
-                echo "DEBUG: DATABASE_NAME=${params.DATABASE_NAME}"
-                echo "DEBUG: DATABASE_USER=${params.DATABASE_USER}"
-                echo "DEBUG: DATABASE_PASSWORD=${params.DATABASE_PASSWORD}"
-                echo "DEBUG: EMAIL_HOST_USER=${params.EMAIL_HOST_USER}"
-                echo "DEBUG: EMAIL_HOST_PASSWORD=${params.EMAIL_HOST_PASSWORD}"
-                echo "DEBUG: CLOUDINARY_CLOUD=${params.CLOUDINARY_CLOUD}"
-                echo "DEBUG: CLOUDINARY_KEY=${params.CLOUDINARY_KEY}"
-                echo "DEBUG: CLOUDINARY_SECRET=${params.CLOUDINARY_SECRET}"
-                sh """
-                    cat << EOF > .env
-                    SECRET_KEY=\${params.SECRET_KEY}
-                    DATABASE_NAME=\${params.DATABASE_NAME}
-                    DATABASE_USER=\${params.DATABASE_USER}
-                    DATABASE_PASSWORD=\${params.DATABASE_PASSWORD}
-                    EMAIL_HOST_USER=\${params.EMAIL_HOST_USER}
-                    EMAIL_HOST_PASSWORD=\${params.EMAIL_HOST_PASSWORD}
-                    CLOUDINARY_CLOUD=\${params.CLOUDINARY_CLOUD}
-                    CLOUDINARY_KEY=\${params.CLOUDINARY_KEY}
-                    CLOUDINARY_SECRET=\${params.CLOUDINARY_SECRET}
-                    EOF
-                    chmod 600 .env
-                    ls
-                """
+                withCredentials([
+                    string(credentialsId: 'SECRET_KEY', variable: 'SECRET_KEY'),
+                    string(credentialsId: 'DATABASE_NAME', variable: 'DATABASE_NAME'),
+                    string(credentialsId: 'DATABASE_USER', variable: 'DATABASE_USER'),
+                    string(credentialsId: 'DATABASE_PASSWORD', variable: 'DATABASE_PASSWORD'),
+                    string(credentialsId: 'EMAIL_HOST_USER', variable: 'EMAIL_HOST_USER'),
+                    string(credentialsId: 'EMAIL_HOST_PASSWORD', variable: 'EMAIL_HOST_PASSWORD'),
+                    string(credentialsId: 'CLOUDINARY_CLOUD', variable: 'CLOUDINARY_CLOUD'),
+                    string(credentialsId: 'CLOUDINARY_KEY', variable: 'CLOUDINARY_KEY'),
+                    string(credentialsId: 'CLOUDINARY_SECRET', variable: 'CLOUDINARY_SECRET')
+                ]) {
+                    sh(script: """
+                        /bin/bash -c '
+                        cat << 'EOF' > .env
+                        SECRET_KEY=\${SECRET_KEY}
+                        DATABASE_NAME=\${DATABASE_NAME}
+                        DATABASE_USER=\${DATABASE_USER}
+                        DATABASE_PASSWORD=\${DATABASE_PASSWORD}
+                        EMAIL_HOST_USER=\${EMAIL_HOST_USER}
+                        EMAIL_HOST_PASSWORD=\${EMAIL_HOST_PASSWORD}
+                        CLOUDINARY_CLOUD=\${CLOUDINARY_CLOUD}
+                        CLOUDINARY_KEY=\${CLOUDINARY_KEY}
+                        CLOUDINARY_SECRET=\${CLOUDINARY_SECRET}
+                        EOF
+                        chmod 600 .env
+                        ls -la .env
+                        '
+                    """)
+                }
             }
         }
 
