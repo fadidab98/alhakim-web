@@ -58,28 +58,34 @@ pipeline {
                         error "Validation failed: ${e.message}"
                     }
                 }
-                sh(script: """
-                    /bin/bash -c '
-                    echo "Creating .env file"
-                    rm -f .env
-                    set -e
-                    touch .env
-                    echo "SECRET_KEY=\${SECRET_KEY}" >> .env
-                    echo "DATABASE_NAME=\${DATABASE_NAME}" >> .env
-                    echo "DATABASE_USER=\${DATABASE_USER}" >> .env
-                    echo "DATABASE_PASSWORD=\${DATABASE_PASSWORD}" >> .env
-                    echo "EMAIL_HOST_USER=\${EMAIL_HOST_USER}" >> .env
-                    echo "EMAIL_HOST_PASSWORD=\${EMAIL_HOST_PASSWORD}" >> .env
-                    echo "CLOUDINARY_CLOUD=\${CLOUDINARY_CLOUD}" >> .env
-                    echo "CLOUDINARY_KEY=\${CLOUDINARY_KEY}" >> .env
-                    echo "CLOUDINARY_SECRET=\${CLOUDINARY_SECRET}" >> .env
-                    chmod 600 .env
-                    ls -la .env
-                    echo ".env file created successfully"
-                    '
-                """, returnStatus: true) == 0 || error("Failed to create .env file")
+                script {
+                    // Run sh step and check exit status
+                    def status = sh(script: """
+                        /bin/bash -c '
+                        echo "Creating .env file"
+                        rm -f .env
+                        set -e
+                        touch .env
+                        echo "SECRET_KEY=\${SECRET_KEY}" >> .env
+                        echo "DATABASE_NAME=\${DATABASE_NAME}" >> .env
+                        echo "DATABASE_USER=\${DATABASE_USER}" >> .env
+                        echo "DATABASE_PASSWORD=\${DATABASE_PASSWORD}" >> .env
+                        echo "EMAIL_HOST_USER=\${EMAIL_HOST_USER}" >> .env
+                        echo "EMAIL_HOST_PASSWORD=\${EMAIL_HOST_PASSWORD}" >> .env
+                        echo "CLOUDINARY_CLOUD=\${CLOUDINARY_CLOUD}" >> .env
+                        echo "CLOUDINARY_KEY=\${CLOUDINARY_KEY}" >> .env
+                        echo "CLOUDINARY_SECRET=\${CLOUDINARY_SECRET}" >> .env
+                        chmod 600 .env
+                        ls -la .env
+                        echo ".env file created successfully"
+                        '
+                    """, returnStatus: true)
+                    if (status != 0) {
+                        error "Failed to create .env file: shell command exited with status ${status}"
+                    }
+                }
                 echo "Create .env File completed"
-            } 
+            }
         }
 
         stage('Build, Run, Tag, and Push Image') {
