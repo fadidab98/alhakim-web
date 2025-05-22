@@ -124,7 +124,9 @@ class Consult(LoginRequiredMixin, generic.TemplateView):
             with transaction.atomic():
                 try:
                     consultation = consultation_form.save(commit=False)
-                    consultation.specialty = consultation_form.cleaned_data.get("specialty", None)
+                    consultation.specialty = consultation_form.cleaned_data.get(
+                        "specialty", None
+                    )
                     consultation.doctor = consultation_form.cleaned_data.get("doctor", None)
                     consultation.patient = request.user
                     consultation.save()
@@ -143,7 +145,8 @@ class Consult(LoginRequiredMixin, generic.TemplateView):
                 except Exception as ex:
                     print(ex)  # Exception is printed to console
                     transaction.set_rollback(True)
-                    messages.error(request, _("حدث خطأ أثناء معالجة الطلب."))
+                    # messages.error(request, _("حدث خطأ أثناء معالجة الطلب."))
+                    messages.error(request, ex)
         else:
             messages.error(request, _("حدث خطأ في استمارة الاستشارة."))
 
