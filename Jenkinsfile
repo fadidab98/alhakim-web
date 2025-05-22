@@ -1,17 +1,7 @@
 pipeline {
     agent none
     // Define parameters for GitHub Secrets
-    parameters {
-        string(name: 'SECRET_KEY', defaultValue: '', description: 'Django secret key')
-        string(name: 'DATABASE_NAME', defaultValue: '', description: 'Database name')
-        string(name: 'DATABASE_USER', defaultValue: '', description: 'Database user')
-        string(name: 'DATABASE_PASSWORD', defaultValue: '', description: 'Database password')
-        string(name: 'EMAIL_HOST_USER', defaultValue: '', description: 'Email host user')
-        string(name: 'EMAIL_HOST_PASSWORD', defaultValue: '', description: 'Email host password')
-        string(name: 'CLOUDINARY_CLOUD', defaultValue: '', description: 'Cloudinary cloud name')
-        string(name: 'CLOUDINARY_KEY', defaultValue: '', description: 'Cloudinary API key')
-        string(name: 'CLOUDINARY_SECRET', defaultValue: '', description: 'Cloudinary API secret')
-    }
+   
     environment {
         IMAGE_NAMESPACE = "fadidab98"
         IMAGE_NAME = "alhakim-web"
