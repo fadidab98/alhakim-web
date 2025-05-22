@@ -30,7 +30,7 @@ pipeline {
         stage('Build, Run, Tag, and Push Image') {
             agent {
                 docker {
-                    image 'docker:27.3.1'
+                    image 'docker:28.0.4'
                     args '-v /var/run/docker.sock:/var/run/docker.sock --group-add 988 --env HOME=/tmp'
                 }
             }
@@ -43,11 +43,6 @@ pipeline {
                             image.push("${env.IMAGE_TAG}")
                             image.push('latest')
                         }
-                        // Verify the pushed image
-                        sh """
-                            docker pull ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG}
-                            docker inspect ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG} | grep -E 'Created|Id'
-                        """
                     }
                 }
             }
@@ -56,7 +51,7 @@ pipeline {
         stage('Cleanup') {
             agent {
                 docker {
-                    image 'docker:27.3.1'
+                    image 'docker:28.0.4'
                     args '-v /var/run/docker.sock:/var/run/docker.sock --group-add 988 --env HOME=/tmp'
                 }
             }
@@ -77,7 +72,7 @@ pipeline {
                                 // Verify local files
                                 sh 'ls -la docker-compose.yaml || { echo "docker-compose.yaml missing"; exit 1; }'
                                 
-                                // Create remote directory
+                                // Create remote directory first
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${env.SERVER_USER}@${env.SERVER_HOST} \
                                     "mkdir -p ${env.REMOTE_DIR} && chmod 755 ${env.REMOTE_DIR}"
@@ -97,27 +92,12 @@ pipeline {
                                     ls -l /var/run/docker.sock && \
                                     cd ${env.REMOTE_DIR} && \
                                     ls -l docker-compose.yaml && \
-                                    echo 'Logging into ghcr.io' && \
-                                    docker login ghcr.io -u '${CR_USER}' --password '\${CR_PASS}' || { echo 'Docker login failed'; exit 1; } && \
-                                    cat /root/.docker/config.json && \
-                                    echo 'Docker login succeeded' && \
-                                    echo 'Removing old images' && \
+                                    docker login ghcr.io -u '${CR_USER}' --password '\${CR_PASS}' && \
                                     docker image rm ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG} || true && \
-                                    docker image rm postgres:13 || true && \
-                                    echo 'Checking database volume' && \
-                                    docker volume ls | grep postgres_data && \
-                                    echo 'Pulling images' && \
-                                    docker-compose -f docker-compose.yaml pull || { echo 'Docker compose pull failed'; exit 1; } && \
-                                    echo 'Inspecting pulled image' && \
-                                    docker inspect ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG} | grep -E 'Created|Id' && \
+                                    docker-compose -f docker-compose.yaml pull && \
                                     docker-compose -f docker-compose.yaml down || true && \
                                     docker-compose -f docker-compose.yaml up -d && \
                                     docker-compose exec -T web python manage.py migrate && \
-                                    docker-compose exec -T web python manage.py collectstatic --noinput && \
-                                    docker ps -a && \
-                                    docker inspect alhakim-web-web-1 | grep -E 'Image|Created|Id' && \
-                                    echo 'Verifying database data' && \
-                                    docker-compose exec -T db psql -U alhakim_user -d alhakim_db -c '\\dt' && \
                                     echo 'Deployment succeeded'"
                                 """
                             }
@@ -129,7 +109,7 @@ pipeline {
     }
     post {
         always {
-            echo "Pipeline completed"
+            echo "Pipeline completed" 
         }
     }
 }
