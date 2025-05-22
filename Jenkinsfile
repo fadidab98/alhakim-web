@@ -9,15 +9,15 @@ pipeline {
         SERVER_USER = "jenkins_user"
         SERVER_HOST = "217.154.21.206"
         REMOTE_DIR = "/projects/alhakim-web"
-        SECRET_KEY = credentials('SECRET_KEY')
-        DATABASE_NAME = credentials('DATABASE_NAME')
-        DATABASE_USER = credentials('DATABASE_USER')
-        DATABASE_PASSWORD = credentials('DATABASE_PASSWORD')
-        EMAIL_HOST_USER = credentials('EMAIL_HOST_USER')
-        EMAIL_HOST_PASSWORD = credentials('EMAIL_HOST_PASSWORD')
-        CLOUDINARY_CLOUD = credentials('CLOUDINARY_CLOUD')
-        CLOUDINARY_KEY = credentials('CLOUDINARY_KEY')
-        CLOUDINARY_SECRET = credentials('CLOUDINARY_SECRET')
+        SECRET_KEY = credentials('ALHAKIM_SECRET_KEY')
+        DATABASE_NAME = credentials('ALHAKIM_DATABASE_NAME')
+        DATABASE_USER = credentials('ALHAKIM_DATABASE_USER')
+        DATABASE_PASSWORD = credentials('ALHAKIM_DATABASE_PASSWORD')
+        EMAIL_HOST_USER = credentials('ALHAKIM_EMAIL_HOST_USER')
+        EMAIL_HOST_PASSWORD = credentials('ALHAKIM_EMAIL_HOST_PASSWORD')
+        CLOUDINARY_CLOUD = credentials('ALHAKIM_CLOUDINARY_CLOUD')
+        CLOUDINARY_KEY = credentials('ALHAKIM_CLOUDINARY_KEY')
+        CLOUDINARY_SECRET = credentials('ALHAKIM_CLOUDINARY_SECRET')
     }
     stages {
         stage('Checkout') {
