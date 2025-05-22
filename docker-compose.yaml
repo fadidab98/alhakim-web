@@ -41,20 +41,20 @@ services:
       - db
     command: |
       sh -c "
-        echo 'Waiting for db service...';
-        until pg_isready -h \$POSTGRES_HOST -U \$POSTGRES_USER -d \$POSTGRES_DB; do
-          echo 'Waiting for database to be ready...';
+        echo 'Waiting for db service...' >> /backups/backup.log;
+        until pg_isready -h \"\$POSTGRES_HOST\" -U \"\$POSTGRES_USER\" -d \"\$POSTGRES_DB\"; do
+          echo 'Waiting for database to be ready...' >> /backups/backup.log;
           sleep 2;
         done;
-        echo 'Database is ready, starting backups';
+        echo 'Database is ready, starting backups' >> /backups/backup.log;
         while true; do
           TIMESTAMP=\$(date +%Y%m%d_%H%M%S);
-          echo \"Creating backup at \$TIMESTAMP\" >> /backups/backup_log.txt;
-          pg_dump -h \$POSTGRES_HOST -U \$POSTGRES_USER --verbose \$POSTGRES_DB > /backups/backup_\$TIMESTAMP.sql 2>> /backups/backup_errors.log;
+          echo \"Creating backup at \$TIMESTAMP\" >> /backups/backup.log;
+          pg_dump -h \"\$POSTGRES_HOST\" -U \"\$POSTGRES_USER\" --verbose \"\$POSTGRES_DB\" > /backups/backup_\$TIMESTAMP.sql 2>> /backups/backup.log;
           if [ \$? -eq 0 ]; then
-            echo \"Backup succeeded: backup_\$TIMESTAMP.sql\" >> /backups/backup_log.txt;
+            echo \"Backup succeeded: backup_\$TIMESTAMP.sql\" >> /backups/backup.log;
           else
-            echo \"Backup failed, check /backups/backup_errors.log\" >> /backups/backup_log.txt;
+            echo \"Backup failed for \$TIMESTAMP\" >> /backups/backup.log;
           fi;
           ls -tp /backups/backup_*.sql | tail -n +11 | xargs -I {} rm -- {} || true;
           sleep 300;
