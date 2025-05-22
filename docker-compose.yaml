@@ -28,6 +28,26 @@ services:
       - POSTGRES_DB=alhakim_db
       - POSTGRES_USER=alhakim_user
       - POSTGRES_PASSWORD=alhakim_pass
+  backup:
+    image: postgres:13
+    volumes:
+      - ./db_backups:/backups
+    environment:
+      - POSTGRES_DB=alhakim_db
+      - POSTGRES_USER=alhakim_user
+      - POSTGRES_PASSWORD=alhakim_pass
+      - POSTGRES_HOST=db
+    depends_on:
+      - db
+    command: >
+      sh -c "
+        while true; do
+          TIMESTAMP=\$(date +%Y%m%d_%H%M%S);
+          pg_dump -h \$POSTGRES_HOST -U \$POSTGRES_USER \$POSTGRES_DB > /backups/backup_\$TIMESTAMP.sql;
+          ls -tp /backups/backup_*.sql | tail -n +11 | xargs -I {} rm -- {} || true;
+          sleep 300;
+        done
+      "
 
 volumes:
-  postgres_data: 
+  postgres_data:
