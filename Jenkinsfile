@@ -42,6 +42,15 @@ pipeline {
         stage('Create .env File') {
             agent any
             steps {
+                echo "DEBUG: SECRET_KEY=${params.SECRET_KEY}"
+                echo "DEBUG: DATABASE_NAME=${params.DATABASE_NAME}"
+                echo "DEBUG: DATABASE_USER=${params.DATABASE_USER}"
+                echo "DEBUG: DATABASE_PASSWORD=${params.DATABASE_PASSWORD}"
+                echo "DEBUG: EMAIL_HOST_USER=${params.EMAIL_HOST_USER}"
+                echo "DEBUG: EMAIL_HOST_PASSWORD=${params.EMAIL_HOST_PASSWORD}"
+                echo "DEBUG: CLOUDINARY_CLOUD=${params.CLOUDINARY_CLOUD}"
+                echo "DEBUG: CLOUDINARY_KEY=${params.CLOUDINARY_KEY}"
+                echo "DEBUG: CLOUDINARY_SECRET=${params.CLOUDINARY_SECRET}"
                 sh """
                     cat << EOF > .env
                     SECRET_KEY=\${params.SECRET_KEY}
