@@ -79,7 +79,7 @@ pipeline {
                     '
                 """, returnStatus: true) == 0 || error("Failed to create .env file")
                 echo "Create .env File completed"
-            }
+            } 
         }
 
         stage('Build, Run, Tag, and Push Image') {
