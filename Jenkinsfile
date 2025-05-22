@@ -1,7 +1,5 @@
 pipeline {
     agent none
-    // Define parameters for GitHub Secrets
-   
     environment {
         IMAGE_NAMESPACE = "fadidab98"
         IMAGE_NAME = "alhakim-web"
@@ -11,17 +9,15 @@ pipeline {
         SERVER_USER = "jenkins_user"
         SERVER_HOST = "217.154.21.206"
         REMOTE_DIR = "/projects/alhakim-web"
-        SECRET_KEY= credentials('SECRET_KEY')
-        DATABASE_NAME= credentials('DATABASE_NAME')
-        DATABASE_USER= credentials('DATABASE_USER')
-        DATABASE_PASSWORD= credentials('DATABASE_PASSWORD')
-        EMAIL_HOST_USER= credentials('EMAIL_HOST_USER')
-        EMAIL_HOST_PASSWORD= credentials('EMAIL_HOST_PASSWORD')
-        CLOUDINARY_CLOUD= credentials('CLOUDINARY_CLOUD')
-        CLOUDINARY_KEY= credentials('CLOUDINARY_KEY')
-        CLOUDINARY_SECRET= credentials('CLOUDINARY_SECRET')
-
-
+        SECRET_KEY = credentials('SECRET_KEY')
+        DATABASE_NAME = credentials('DATABASE_NAME')
+        DATABASE_USER = credentials('DATABASE_USER')
+        DATABASE_PASSWORD = credentials('DATABASE_PASSWORD')
+        EMAIL_HOST_USER = credentials('EMAIL_HOST_USER')
+        EMAIL_HOST_PASSWORD = credentials('EMAIL_HOST_PASSWORD')
+        CLOUDINARY_CLOUD = credentials('CLOUDINARY_CLOUD')
+        CLOUDINARY_KEY = credentials('CLOUDINARY_KEY')
+        CLOUDINARY_SECRET = credentials('CLOUDINARY_SECRET')
     }
     stages {
         stage('Checkout') {
@@ -43,25 +39,35 @@ pipeline {
         stage('Create .env File') {
             agent any
             steps {
-                 
+                script {
+                    // Validate environment variables
+                    def missingVars = []
+                    ['SECRET_KEY', 'DATABASE_NAME', 'DATABASE_USER', 'DATABASE_PASSWORD', 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD', 'CLOUDINARY_CLOUD', 'CLOUDINARY_KEY', 'CLOUDINARY_SECRET'].each { var ->
+                        if (!env[var] || env[var].trim() == '') {
+                            missingVars << var
+                        }
+                    }
+                    if (missingVars) {
+                        error "Missing or empty environment variables: ${missingVars.join(', ')}. Check Jenkins credentials."
+                    }
+                }
                 sh(script: """
                     /bin/bash -c '
-                    cat << 'EOF' > .env
-                    SECRET_KEY=\${env.SECRET_KEY}
-                    DATABASE_NAME=\${env.DATABASE_NAME}
-                    DATABASE_USER=\${env.DATABASE_USER}
-                    DATABASE_PASSWORD=\${env.DATABASE_PASSWORD}
-                    EMAIL_HOST_USER=\${env.EMAIL_HOST_USER}
-                    EMAIL_HOST_PASSWORD=\${env.EMAIL_HOST_PASSWORD}
-                    CLOUDINARY_CLOUD=\${env.CLOUDINARY_CLOUD}
-                    CLOUDINARY_KEY=\${env.CLOUDINARY_KEY}
-                    CLOUDINARY_SECRET=\${env.CLOUDINARY_SECRET}
+                    cat << EOF > .env
+                    SECRET_KEY=\${SECRET_KEY}
+                    DATABASE_NAME=\${DATABASE_NAME}
+                    DATABASE_USER=\${DATABASE_USER}
+                    DATABASE_PASSWORD=\${DATABASE_PASSWORD}
+                    EMAIL_HOST_USER=\${EMAIL_HOST_USER}
+                    EMAIL_HOST_PASSWORD=\${EMAIL_HOST_PASSWORD}
+                    CLOUDINARY_CLOUD=\${CLOUDINARY_CLOUD}
+                    CLOUDINARY_KEY=\${CLOUDINARY_KEY}
+                    CLOUDINARY_SECRET=\${CLOUDINARY_SECRET}
                     EOF
                     chmod 600 .env
                     ls -la .env
                     '
                 """)
-                
             }
         }
 
