@@ -41,9 +41,17 @@ services:
       - db
     command: >
       sh -c "
+        echo 'Waiting for db service...';
+        sleep 10;
         while true; do
           TIMESTAMP=\$(date +%Y%m%d_%H%M%S);
-          pg_dump -h \$POSTGRES_HOST -U \$POSTGRES_USER \$POSTGRES_DB > /backups/backup_\$TIMESTAMP.sql;
+          echo \"Creating backup at \$TIMESTAMP\";
+          pg_dump -h \$POSTGRES_HOST -U \$POSTGRES_USER --verbose \$POSTGRES_DB > /backups/backup_\$TIMESTAMP.sql 2>> /backups/backup_errors.log;
+          if [ \$? -eq 0 ]; then
+            echo \"Backup succeeded: backup_\$TIMESTAMP.sql\";
+          else
+            echo \"Backup failed, check /backups/backup_errors.log\";
+          fi;
           ls -tp /backups/backup_*.sql | tail -n +11 | xargs -I {} rm -- {} || true;
           sleep 300;
         done
