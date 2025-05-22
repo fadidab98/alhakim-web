@@ -39,35 +39,46 @@ pipeline {
         stage('Create .env File') {
             agent any
             steps {
+                echo "Starting Create .env File stage"
                 script {
-                    // Validate environment variables
-                    def missingVars = []
-                    ['SECRET_KEY', 'DATABASE_NAME', 'DATABASE_USER', 'DATABASE_PASSWORD', 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD', 'CLOUDINARY_CLOUD', 'CLOUDINARY_KEY', 'CLOUDINARY_SECRET'].each { var ->
-                        if (!env[var] || env[var].trim() == '') {
-                            missingVars << var
+                    try {
+                        // Validate environment variables
+                        echo "Validating environment variables"
+                        def missingVars = []
+                        ['SECRET_KEY', 'DATABASE_NAME', 'DATABASE_USER', 'DATABASE_PASSWORD', 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD', 'CLOUDINARY_CLOUD', 'CLOUDINARY_KEY', 'CLOUDINARY_SECRET'].each { var ->
+                            if (!env[var] || env[var].trim() == '') {
+                                missingVars << var
+                            }
                         }
-                    }
-                    if (missingVars) {
-                        error "Missing or empty environment variables: ${missingVars.join(', ')}. Check Jenkins credentials."
+                        if (missingVars) {
+                            error "Missing or empty environment variables: ${missingVars.join(', ')}. Check Jenkins credentials."
+                        }
+                        echo "All environment variables are defined"
+                    } catch (Exception e) {
+                        error "Validation failed: ${e.message}"
                     }
                 }
                 sh(script: """
                     /bin/bash -c '
-                    cat << EOF > .env
-                    SECRET_KEY=\${SECRET_KEY}
-                    DATABASE_NAME=\${DATABASE_NAME}
-                    DATABASE_USER=\${DATABASE_USER}
-                    DATABASE_PASSWORD=\${DATABASE_PASSWORD}
-                    EMAIL_HOST_USER=\${EMAIL_HOST_USER}
-                    EMAIL_HOST_PASSWORD=\${EMAIL_HOST_PASSWORD}
-                    CLOUDINARY_CLOUD=\${CLOUDINARY_CLOUD}
-                    CLOUDINARY_KEY=\${CLOUDINARY_KEY}
-                    CLOUDINARY_SECRET=\${CLOUDINARY_SECRET}
-                    EOF
+                    echo "Creating .env file"
+                    rm -f .env
+                    set -e
+                    touch .env
+                    echo "SECRET_KEY=\${SECRET_KEY}" >> .env
+                    echo "DATABASE_NAME=\${DATABASE_NAME}" >> .env
+                    echo "DATABASE_USER=\${DATABASE_USER}" >> .env
+                    echo "DATABASE_PASSWORD=\${DATABASE_PASSWORD}" >> .env
+                    echo "EMAIL_HOST_USER=\${EMAIL_HOST_USER}" >> .env
+                    echo "EMAIL_HOST_PASSWORD=\${EMAIL_HOST_PASSWORD}" >> .env
+                    echo "CLOUDINARY_CLOUD=\${CLOUDINARY_CLOUD}" >> .env
+                    echo "CLOUDINARY_KEY=\${CLOUDINARY_KEY}" >> .env
+                    echo "CLOUDINARY_SECRET=\${CLOUDINARY_SECRET}" >> .env
                     chmod 600 .env
                     ls -la .env
+                    echo ".env file created successfully"
                     '
-                """)
+                """, returnStatus: true) == 0 || error("Failed to create .env file")
+                echo "Create .env File completed"
             }
         }
 
