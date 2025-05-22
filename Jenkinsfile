@@ -55,6 +55,7 @@ pipeline {
                     CLOUDINARY_SECRET=\${params.CLOUDINARY_SECRET}
                     EOF
                     chmod 600 .env
+                    ls
                 """
             }
         }
