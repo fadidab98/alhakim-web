@@ -30,4 +30,4 @@ services:
       - POSTGRES_PASSWORD=alhakim_pass
 
 volumes:
-  postgres_data:
+  postgres_data: 
