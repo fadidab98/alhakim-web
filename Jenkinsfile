@@ -112,13 +112,13 @@ pipeline {
                     sshagent(credentials: ['jenkins-key']) {
                         withCredentials([usernamePassword(credentialsId: 'CR_PAT', usernameVariable: 'CR_USER', passwordVariable: 'CR_PASS')]) {
                             script {
-                                sh 'ls -la docker-compose.yaml .env || { echo "docker-compose.yaml or .env missing"; exit 1; }'
+                                sh 'ls -la docker-compose.yaml  || { echo "docker-compose.yaml or  missing"; exit 1; }'
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${env.SERVER_USER}@${env.SERVER_HOST} \
                                     "mkdir -p ${env.REMOTE_DIR} && chmod 755 ${env.REMOTE_DIR}"
                                 """
                                 sh """
-                                    scp -o StrictHostKeyChecking=no docker-compose.yaml .env \
+                                    scp -o StrictHostKeyChecking=no docker-compose.yaml  \
                                     ${env.SERVER_USER}@${env.SERVER_HOST}:${env.REMOTE_DIR}/
                                 """
                                 sh """
@@ -127,8 +127,8 @@ pipeline {
                                     sudo systemctl status nginx && \
                                     ls -l /var/run/docker.sock && \
                                     cd ${env.REMOTE_DIR} && \
-                                    ls -l docker-compose.yaml .env && \
-                                    chmod 600 ${env.REMOTE_DIR}/.env && \
+                                    ls -l docker-compose.yaml  && \
+                                    
                                     docker login ghcr.io -u '${CR_USER}' --password '\${CR_PASS}' && \
                                     docker image rm ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG} || true && \
                                     docker-compose -f docker-compose.yaml pull && \
