@@ -28,6 +28,11 @@ services:
       - POSTGRES_DB=alhakim_db
       - POSTGRES_USER=alhakim_user
       - POSTGRES_PASSWORD=alhakim_pass
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alhakim_user -d alhakim_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   backup:
     image: postgres:13
     volumes:
@@ -37,36 +42,46 @@ services:
       - POSTGRES_USER=alhakim_user
       - POSTGRES_PASSWORD=alhakim_pass
       - POSTGRES_HOST=db
-      - MAX_BACKUPS=5  # New variable to control when to stop
+      - MAX_BACKUPS=5
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     command: |
-      sh -c "
-        echo 'Waiting for db service...' >> /backups/backup.log;
-        until pg_isready -h \"${POSTGRES_HOST}\" -U \"${POSTGRES_USER}\" -d \"${POSTGRES_DB}\"; do
-          echo 'Waiting for database to be ready...' >> /backups/backup.log;
-          sleep 2;
-        done;
-        echo 'Database is ready, starting backups' >> /backups/backup.log;
-        COUNTER=0;
-        while [ \$COUNTER -lt ${MAX_BACKUPS} ]; do
-          TIMESTAMP=\$(date +%Y%m%d_%H%M%S);
-          echo \"Creating backup at \$TIMESTAMP\" >> /backups/backup.log;
-          pg_dump -h \"${POSTGRES_HOST}\" -U \"${POSTGRES_USER}\" --verbose \"${POSTGRES_DB}\" > /backups/backup_\$TIMESTAMP.sql 2>> /backups/backup.log;
-          if [ \$? -eq 0 ]; then
-            echo \"Backup succeeded: backup_\$TIMESTAMP.sql\" >> /backups/backup.log;
+      sh -c '
+        echo "Starting backup process at $(date)" >> /backups/backup.log
+        echo "POSTGRES_HOST is ${POSTGRES_HOST}" >> /backups/backu
+        for i in {1..30}; do
+          pg_isready -h "${POSTGRES_HOST}" -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" >> /backups/backup.log 2>&1
+          if [ $? -eq 0 ]; then
+            echo "Database is ready at $(date)" >> /backups/backup.log
+            break
+          fi
+          echo "Waiting for database to be ready... Attempt $i/30" >> /backups/backup.log
+          sleep 2
+          if [ $i -eq 30 ]; then
+            echo "Error: Database not ready after 60 seconds" >> /backups/backup.log
+            exit 1
+          fi
+        done
+        COUNTER=0
+        while [ $COUNTER -lt ${MAX_BACKUPS} ]; do
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          echo "Creating backup at $TIMESTAMP" >> /backups/backup.log
+          PGPASSWORD="${POSTGRES_PASSWORD}" pg_dump -h "${POSTGRES_HOST}" -U "${POSTGRES_USER}" --verbose "${POSTGRES_DB}" > /backups/backup_${TIMESTAMP}.sql 2>> /backups/backup.log
+          if [ $? -eq 0 ]; then
+            echo "Backup succeeded: backup_${TIMESTAMP}.sql" >> /backups/backup.log
           else
-            echo \"Backup failed for \$TIMESTAMP\" >> /backups/backup.log;
-          fi;
-          COUNTER=\$((COUNTER + 1));
-          echo \"Backup \$COUNTER of ${MAX_BACKUPS} completed\" >> /backups/backup.log;
-          ls -tp /backups/backup_*.sql | tail -n +11 | xargs -I {} rm -- {} || true;
-          if [ \$COUNTER -lt ${MAX_BACKUPS} ]; then
-            sleep 300;
-          fi;
-        done;
-        echo 'Test completed: Maximum backups reached' >> /backups/backup.log
-      "
+            echo "Backup failed for $TIMESTAMP" >> /backups/backup.log
+          fi
+          COUNTER=$((COUNTER + 1))
+          echo "Backup $COUNTER of ${MAX_BACKUPS} completed" >> /backups/backup.log
+          ls -tp /backups/backup_*.sql | tail -n +11 | xargs -I {} rm -- {} || true
+          if [ $COUNTER -lt ${MAX_BACKUPS} ]; then
+            sleep 300
+          fi
+        done
+        echo "Backup process completed: Maximum backups reached at $(date)" >> /backups/backup.log
+      '
 
 volumes:
   postgres_data:
