@@ -87,7 +87,7 @@ pipeline {
                 }
                 script {
                     def status = sh(script: """
-                        /bin/bash -c '
+                        /bin/bash -c ' 
                         echo "Creating .env file"
                         rm -f .env
                         set -e
