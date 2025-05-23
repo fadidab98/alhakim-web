@@ -42,7 +42,7 @@ services:
     command: |
       sh -c "
         echo 'Waiting for db service...' >> /backups/backup.log;
-        until pg_isready -h \"\db\" -U \"\alhakim_user\" -d \"\alhakim_db\"; do
+        until pg_isready -h \"${POSTGRES_HOST}\" -U \"${POSTGRES_USER}\" -d \"${POSTGRES_DB}\"; do
           echo 'Waiting for database to be ready...' >> /backups/backup.log;
           sleep 2;
         done;
@@ -50,7 +50,7 @@ services:
         while true; do
           TIMESTAMP=\$(date +%Y%m%d_%H%M%S);
           echo \"Creating backup at \$TIMESTAMP\" >> /backups/backup.log;
-          pg_dump -h \"\db\" -U \"\alhakim_user\" --verbose \"\alhakim_db\" > /backups/backup_\$TIMESTAMP.sql 2>> /backups/backup.log;
+          pg_dump -h \"${POSTGRES_HOST}\" -U \"${POSTGRES_USER}\" --verbose \"${POSTGRES_DB}\" > /backups/backup_\$TIMESTAMP.sql 2>> /backups/backup.log;
           if [ \$? -eq 0 ]; then
             echo \"Backup succeeded: backup_\$TIMESTAMP.sql\" >> /backups/backup.log;
           else
