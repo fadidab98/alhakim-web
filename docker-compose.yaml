@@ -37,6 +37,7 @@ services:
       - POSTGRES_USER=alhakim_user
       - POSTGRES_PASSWORD=alhakim_pass
       - POSTGRES_HOST=db
+      - MAX_BACKUPS=5  # New variable to control when to stop
     depends_on:
       - db
     command: |
@@ -47,7 +48,8 @@ services:
           sleep 2;
         done;
         echo 'Database is ready, starting backups' >> /backups/backup.log;
-        while true; do
+        COUNTER=0;
+        while [ \$COUNTER -lt ${MAX_BACKUPS} ]; do
           TIMESTAMP=\$(date +%Y%m%d_%H%M%S);
           echo \"Creating backup at \$TIMESTAMP\" >> /backups/backup.log;
           pg_dump -h \"${POSTGRES_HOST}\" -U \"${POSTGRES_USER}\" --verbose \"${POSTGRES_DB}\" > /backups/backup_\$TIMESTAMP.sql 2>> /backups/backup.log;
@@ -56,9 +58,14 @@ services:
           else
             echo \"Backup failed for \$TIMESTAMP\" >> /backups/backup.log;
           fi;
+          COUNTER=\$((COUNTER + 1));
+          echo \"Backup \$COUNTER of ${MAX_BACKUPS} completed\" >> /backups/backup.log;
           ls -tp /backups/backup_*.sql | tail -n +11 | xargs -I {} rm -- {} || true;
-          sleep 300;
-        done
+          if [ \$COUNTER -lt ${MAX_BACKUPS} ]; then
+            sleep 300;
+          fi;
+        done;
+        echo 'Test completed: Maximum backups reached' >> /backups/backup.log
       "
 
 volumes:
