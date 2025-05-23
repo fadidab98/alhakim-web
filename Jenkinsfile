@@ -198,7 +198,7 @@ pipeline {
     post {
         always {
             echo "Pipeline completed"
-            sh 'rm -f .env || true'
+            
         }
     }
 }
