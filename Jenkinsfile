@@ -23,16 +23,21 @@ pipeline {
         stage('Checkout') {
             agent any
             steps {
+                echo "Starting Checkout stage"
                 timeout(time: 5, unit: 'MINUTES') {
                     git branch: 'master', credentialsId: 'jenkins', url: 'https://github.com/fadidab98/alhakim-web.git'
                 }
+                echo "Checkout completed"
             }
         }
 
         stage('Debug Workspace') {
             agent any
             steps {
+                echo "Starting Debug Workspace stage"
                 sh 'ls -la'
+                sh 'which bash || echo "Bash not found"'
+                echo "Debug Workspace completed"
             }
         }
 
@@ -40,10 +45,48 @@ pipeline {
             agent any
             steps {
                 echo "Starting Create .env File stage"
-                
                 script {
-                    // Run sh step and check exit status
-                    sh """
+                    try {
+                        // Validate environment variables
+                        echo "Validating environment variables"
+                        def missingVars = []
+                        if (!env.SECRET_KEY || env.SECRET_KEY.trim() == '') {
+                            missingVars << 'SECRET_KEY'
+                        }
+                        if (!env.DATABASE_NAME || env.DATABASE_NAME.trim() == '') {
+                            missingVars << 'DATABASE_NAME'
+                        }
+                        if (!env.DATABASE_USER || env.DATABASE_USER.trim() == '') {
+                            missingVars << 'DATABASE_USER'
+                        }
+                        if (!env.DATABASE_PASSWORD || env.DATABASE_PASSWORD.trim() == '') {
+                            missingVars << 'DATABASE_PASSWORD'
+                        }
+                        if (!env.EMAIL_HOST_USER || env.EMAIL_HOST_USER.trim() == '') {
+                            missingVars << 'EMAIL_HOST_USER'
+                        }
+                        if (!env.EMAIL_HOST_PASSWORD || env.EMAIL_HOST_PASSWORD.trim() == '') {
+                            missingVars << 'EMAIL_HOST_PASSWORD'
+                        }
+                        if (!env.CLOUDINARY_CLOUD || env.CLOUDINARY_CLOUD.trim() == '') {
+                            missingVars << 'CLOUDINARY_CLOUD'
+                        }
+                        if (!env.CLOUDINARY_KEY || env.CLOUDINARY_KEY.trim() == '') {
+                            missingVars << 'CLOUDINARY_KEY'
+                        }
+                        if (!env.CLOUDINARY_SECRET || env.CLOUDINARY_SECRET.trim() == '') {
+                            missingVars << 'CLOUDINARY_SECRET'
+                        }
+                        if (missingVars) {
+                            error "Missing or empty environment variables: ${missingVars.join(', ')}. Check Jenkins credentials."
+                        }
+                        echo "All environment variables are defined"
+                    } catch (Exception e) {
+                        error "Validation failed: ${e.message}"
+                    }
+                }
+                script {
+                    def status = sh(script: """
                         /bin/bash -c '
                         echo "Creating .env file"
                         rm -f .env
@@ -62,8 +105,10 @@ pipeline {
                         ls -la .env
                         echo ".env file created successfully"
                         '
-                    """ 
-
+                    """, returnStatus: true)
+                    if (status != 0) {
+                        error "Failed to create .env file: shell command exited with status ${status}"
+                    }
                 }
                 echo "Create .env File completed"
             }
@@ -77,9 +122,11 @@ pipeline {
                 }
             }
             steps {
+                echo "Starting Build stage"
                 timeout(time: 10, unit: 'MINUTES') {
                     script {
-                        echo "####### Packaging stage #######"
+                        echo "Packaging Docker image"
+                        sh 'ls -la .env || echo ".env not found in build context"'
                         def image = docker.build("${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG}")
                         docker.withRegistry('https://ghcr.io', 'CR_PAT') {
                             image.push("${env.IMAGE_TAG}")
@@ -87,6 +134,7 @@ pipeline {
                         }
                     }
                 }
+                echo "Build completed"
             }
         }
 
@@ -98,27 +146,30 @@ pipeline {
                 }
             }
             steps {
+                echo "Starting Cleanup stage"
                 sh "docker rmi ${env.IMAGE_NAME}:${env.IMAGE_TAG} || true"
                 sh "docker rmi ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG} || true"
                 sh "docker rmi ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:latest || true"
                 sh 'rm -f .env || true'
+                echo "Cleanup completed"
             }
         }
 
         stage('Deploy to Server') {
             agent any
             steps {
+                echo "Starting Deploy to Server stage"
                 timeout(time: 5, unit: 'MINUTES') {
                     sshagent(credentials: ['jenkins-key']) {
                         withCredentials([usernamePassword(credentialsId: 'CR_PAT', usernameVariable: 'CR_USER', passwordVariable: 'CR_PASS')]) {
                             script {
-                                sh 'ls -la docker-compose.yaml  || { echo "docker-compose.yaml or  missing"; exit 1; }'
+                                sh 'ls -la docker-compose.yaml || { echo "docker-compose.yaml missing"; exit 1; }'
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${env.SERVER_USER}@${env.SERVER_HOST} \
                                     "mkdir -p ${env.REMOTE_DIR} && chmod 755 ${env.REMOTE_DIR}"
                                 """
                                 sh """
-                                    scp -o StrictHostKeyChecking=no docker-compose.yaml  \
+                                    scp -o StrictHostKeyChecking=no docker-compose.yaml \
                                     ${env.SERVER_USER}@${env.SERVER_HOST}:${env.REMOTE_DIR}/
                                 """
                                 sh """
@@ -127,8 +178,7 @@ pipeline {
                                     sudo systemctl status nginx && \
                                     ls -l /var/run/docker.sock && \
                                     cd ${env.REMOTE_DIR} && \
-                                    ls -l docker-compose.yaml  && \
-                                    
+                                    ls -l docker-compose.yaml && \
                                     docker login ghcr.io -u '${CR_USER}' --password '\${CR_PASS}' && \
                                     docker image rm ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG} || true && \
                                     docker-compose -f docker-compose.yaml pull && \
@@ -141,6 +191,7 @@ pipeline {
                         }
                     }
                 }
+                echo "Deploy to Server completed"
             }
         }
     }
