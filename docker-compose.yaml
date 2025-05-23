@@ -47,20 +47,20 @@ services:
       db:
         condition: service_healthy
     command: |
-      sh -c '
+      bash -c '
         echo "Starting backup process at $(date)" >> /backups/backup.log
-        echo "POSTGRES_HOST is ${POSTGRES_HOST}" >> /backups/backup.log
+        echo "Environment: HOST=${POSTGRES_HOST}, USER=${POSTGRES_USER}, DB=${POSTGRES_DB}, PASS=${POSTGRES_PASSWORD}" >> /backups/backup.log
         i=1
-        while [ $i -lt 31 ]; do
+        while [ $i -le 30 ]; do
           pg_isready -h "${POSTGRES_HOST}" -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" >> /backups/backup.log 2>&1
-          if [ $? = 0 ]; then
+          if [ $? -eq 0 ]; then
             echo "Database is ready at $(date)" >> /backups/backup.log
             break
           fi
           echo "Waiting for database to be ready... Attempt $i/30" >> /backups/backup.log
           sleep 2
           i=$((i + 1))
-          if [ $i = 31 ]; then
+          if [ $i -eq 31 ]; then
             echo "Error: Database not ready after 60 seconds" >> /backups/backup.log
             exit 1
           fi
@@ -70,7 +70,7 @@ services:
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           echo "Creating backup at $TIMESTAMP" >> /backups/backup.log
           PGPASSWORD="${POSTGRES_PASSWORD}" pg_dump -h "${POSTGRES_HOST}" -U "${POSTGRES_USER}" --verbose "${POSTGRES_DB}" > /backups/backup_${TIMESTAMP}.sql 2>> /backups/backup.log
-          if [ $? = 0 ]; then
+          if [ $? -eq 0 ]; then
             echo "Backup succeeded: backup_${TIMESTAMP}.sql" >> /backups/backup.log
           else
             echo "Backup failed for $TIMESTAMP" >> /backups/backup.log
