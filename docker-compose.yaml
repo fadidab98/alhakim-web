@@ -42,11 +42,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
     command: |
       bash -c '
+        set -e
         echo "Starting backup process at $(date)" >> /backups/backup.log
         i=1
-        while [ $i -le 30 ]; do
+        while [ "$i" -le 30 ]; do
           pg_isready -h db -U alhakim_user -d alhakim_db -p 5432 >> /backups/backup.log 2>&1
           if [ $? -eq 0 ]; then
             echo "Database is ready at $(date)" >> /backups/backup.log
@@ -55,13 +57,13 @@ services:
           echo "Waiting for database to be ready... Attempt $i/30" >> /backups/backup.log
           sleep 2
           i=$((i + 1))
-          if [ $i -eq 31 ]; then
+          if [ "$i" -eq 31 ]; then
             echo "Error: Database not ready after 60 seconds" >> /backups/backup.log
             exit 1
           fi
         done
         COUNTER=0
-        while [ $COUNTER -lt ${MAX_BACKUPS} ]; do
+        while [ "$COUNTER" -lt "${MAX_BACKUPS}" ]; do
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           echo "Creating backup at $TIMESTAMP" >> /backups/backup.log
           PGPASSWORD=alhakim_pass pg_dump -h db -U alhakim_user -d alhakim_db -p 5432 --verbose > /backups/backup_${TIMESTAMP}.sql 2>> /backups/backup.log
@@ -73,7 +75,7 @@ services:
           COUNTER=$((COUNTER + 1))
           echo "Backup $COUNTER of ${MAX_BACKUPS} completed" >> /backups/backup.log
           ls -tp /backups/backup_*.sql | tail -n +11 | xargs -I {} rm -- {} || true
-          if [ $COUNTER -lt ${MAX_BACKUPS} ]; then
+          if [ "$COUNTER" -lt "${MAX_BACKUPS}" ]; then
             sleep 300
           fi
         done
