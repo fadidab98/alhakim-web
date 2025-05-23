@@ -126,7 +126,7 @@ pipeline {
                 timeout(time: 10, unit: 'MINUTES') {
                     script {
                         echo "Packaging Docker image"
-                        sh 'ls -la '
+                        sh 'ls -la'
                         def image = docker.build("${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG}")
                         docker.withRegistry('https://ghcr.io', 'CR_PAT') {
                             image.push("${env.IMAGE_TAG}")
