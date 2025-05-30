@@ -7,7 +7,7 @@
 <nav class="navbar navbar-expand-lg navbar-light navbar__custom">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'base:index' %}"> 
-            {% cloudinary "Assets/logo_dhkemf_onl6x2.webp" alt="Logo" class="logo" fetch_format="webp" quality="auto:eco" width=65 height=65 sign_url=True %}
+            {% cloudinary "Logo_blxdj0.png" alt="Logo" class="logo" fetch_format="webp" quality="auto:eco" width=65 height=65 sign_url=True %}
             <span>
                 Al-Hakim
             </span>
@@ -83,7 +83,7 @@
                             {% if request.user.profile_doctor.profile_pic %}
                             {% cloudinary request.user.profile_doctor.profile_pic.name alt="User Logo" class="user__logo" fetch_format="webp" quality="auto:eco" width=52 height=52 crop="scale" sign_url=True %}
                             {% else %}
-                            {% cloudinary "Assets/user_yyxue1.webp" alt="User Logo" class="user__logo" fetch_format="webp" quality="auto:eco" width=52 height=52 crop="scale" sign_url=True %}
+                            {% cloudinary "user_ztpm5z.png" alt="User Logo" class="user__logo" fetch_format="webp" quality="auto:eco" width=52 height=52 crop="scale" sign_url=True %}
                             {% endif %}
                         </span>
                     </a>
