@@ -1,7 +1,9 @@
 version: "3.8"
 services:
   web:
-    image: ghcr.io/fadidab98/alhakim-web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     pull_policy: always
     command: gunicorn --bind 0.0.0.0:8000 core.wsgi:application
     volumes:
