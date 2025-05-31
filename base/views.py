@@ -12,9 +12,6 @@ from django.urls import reverse_lazy
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-import os
-
-from dotenv import load_dotenv
 
 from accounts.models import Doctor
 from chat.models import Thread
@@ -23,7 +20,7 @@ from specialties.models import Specialty
 
 from .forms import ConsultationForm, ContactForm, DocumentsForm
 from .models import Consultation, ConsultationHistory, Document
-load_dotenv()
+
 
 class Index(generic.ListView):
     model = Doctor
@@ -58,7 +55,7 @@ class Index(generic.ListView):
             send_mail(
                 subject,
                 body,
-                os.environ.get("EMAIL_HOST_USER"),
+                settings.EMAIL_HOST_USER,
                 [
                     "berrofouad66@gmail.com",
                 ],
@@ -77,7 +74,7 @@ class Index(generic.ListView):
             send_mail(
                 _("أهلا وسهلا بك في موقعنا"),
                 plain_message,
-                os.environ.get("EMAIL_HOST_USER"),
+                settings.EMAIL_HOST_USER,
                 [
                     email,
                 ],
@@ -247,7 +244,7 @@ class RequestDetails(LoginRequiredMixin, DoctorUserOnlyMixin, generic.DetailView
                 mail = EmailMessage(
                     subject,
                     body,
-                    os.environ.get("EMAIL_HOST_USER"),
+                    settings.EMAIL_HOST_USER,
                     [
                         self.get_object().email,
                     ],
