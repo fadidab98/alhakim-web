@@ -1,6 +1,3 @@
-import os
-
-from dotenv import load_dotenv
 import cloudinary.uploader
 from django.conf import settings
 from django.contrib import messages
@@ -23,7 +20,7 @@ from specialties.models import Specialty
 
 from .forms import ConsultationForm, ContactForm, DocumentsForm
 from .models import Consultation, ConsultationHistory, Document
-load_dotenv()
+
 
 class Index(generic.ListView):
     model = Doctor
@@ -58,7 +55,7 @@ class Index(generic.ListView):
             send_mail(
                 subject,
                 body,
-                os.environ.get("EMAIL_HOST_USER"),
+                settings.EMAIL_HOST_USER,
                 [
                     "berrofouad66@gmail.com",
                 ],
