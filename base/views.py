@@ -12,6 +12,9 @@ from django.urls import reverse_lazy
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
+import os
+
+from dotenv import load_dotenv
 
 from accounts.models import Doctor
 from chat.models import Thread
@@ -20,7 +23,7 @@ from specialties.models import Specialty
 
 from .forms import ConsultationForm, ContactForm, DocumentsForm
 from .models import Consultation, ConsultationHistory, Document
-
+load_dotenv()
 
 class Index(generic.ListView):
     model = Doctor
