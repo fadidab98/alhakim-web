@@ -171,7 +171,7 @@ pipeline {
                                     "mkdir -p ${env.REMOTE_DIR} && chmod 755 ${env.REMOTE_DIR}"
                                 """
                                 sh """
-                                    scp -o StrictHostKeyChecking=no docker-compose.yaml \
+                                    scp -o StrictHostKeyChecking=no docker-compose.yaml .env \
                                     ${env.SERVER_USER}@${env.SERVER_HOST}:${env.REMOTE_DIR}/
                                 """
                                 sh """
