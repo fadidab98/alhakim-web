@@ -55,7 +55,7 @@ class Index(generic.ListView):
             send_mail(
                 subject,
                 body,
-                settings.EMAIL_HOST_USER,
+                os.environ.get("EMAIL_HOST_USER"),
                 [
                     "berrofouad66@gmail.com",
                 ],
@@ -74,7 +74,7 @@ class Index(generic.ListView):
             send_mail(
                 _("أهلا وسهلا بك في موقعنا"),
                 plain_message,
-                settings.EMAIL_HOST_USER,
+                os.environ.get("EMAIL_HOST_USER"),
                 [
                     email,
                 ],
@@ -244,7 +244,7 @@ class RequestDetails(LoginRequiredMixin, DoctorUserOnlyMixin, generic.DetailView
                 mail = EmailMessage(
                     subject,
                     body,
-                    settings.EMAIL_HOST_USER,
+                    os.environ.get("EMAIL_HOST_USER"),
                     [
                         self.get_object().email,
                     ],
