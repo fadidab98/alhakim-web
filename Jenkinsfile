@@ -165,7 +165,7 @@ pipeline {
                     sshagent(credentials: ['jenkins-key']) {
                         withCredentials([usernamePassword(credentialsId: 'CR_PAT', usernameVariable: 'CR_USER', passwordVariable: 'CR_PASS')]) {
                             script {
-                                sh 'ls -la docker-compose.yaml || { echo "docker-compose.yaml missing"; exit 1; }'
+                                sh 'ls -la  || { echo "docker-compose.yaml missing"; exit 1; }'
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${env.SERVER_USER}@${env.SERVER_HOST} \
                                     "mkdir -p ${env.REMOTE_DIR} && chmod 755 ${env.REMOTE_DIR}"
