@@ -180,7 +180,7 @@ pipeline {
                                     cd ${env.REMOTE_DIR} && \
                                     ls -l docker-compose.yaml && \
                                     docker login ghcr.io -u '${CR_USER}' --password '\${CR_PASS}' && \
-                                    docker image rm ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG} || true && \
+                                    docker image rm ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG} && \
                                     docker-compose -f docker-compose.yaml pull && \
                                     docker-compose -f docker-compose.yaml down || true && \
                                     docker-compose -f docker-compose.yaml up -d && \
