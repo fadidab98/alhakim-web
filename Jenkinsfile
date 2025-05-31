@@ -152,7 +152,7 @@ pipeline {
                 sh "docker rmi ${env.IMAGE_NAME}:${env.IMAGE_TAG} || true"
                 sh "docker rmi ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:${env.IMAGE_TAG} || true"
                 sh "docker rmi ghcr.io/${env.IMAGE_NAMESPACE}/${env.IMAGE_NAME}:latest || true"
-                sh 'rm -f .env || true'
+                
                 echo "Cleanup completed"
             }
         }
