@@ -18,6 +18,7 @@ pipeline {
         CLOUDINARY_CLOUD = credentials('ALHAKIM_CLOUDINARY_CLOUD')
         CLOUDINARY_KEY = credentials('ALHAKIM_CLOUDINARY_KEY')
         CLOUDINARY_SECRET = credentials('ALHAKIM_CLOUDINARY_SECRET')
+        DJANGO_SETTINGS_MODULE = credentials('DJANGO_SETTINGS_MODULE')
     }
     stages {
         stage('Checkout') {
@@ -101,6 +102,7 @@ pipeline {
                         echo "CLOUDINARY_CLOUD=\${CLOUDINARY_CLOUD}" >> .env
                         echo "CLOUDINARY_KEY=\${CLOUDINARY_KEY}" >> .env
                         echo "CLOUDINARY_SECRET=\${CLOUDINARY_SECRET}" >> .env
+                         echo "DJANGO_SETTINGS_MODULE=\${DJANGO_SETTINGS_MODULE}" >> .env
                         chmod 600 .env
                         ls -la .env
                         echo ".env file created successfully"
