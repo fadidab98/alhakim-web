@@ -30,8 +30,8 @@ def send_email_to_user(sender, instance, created, **kwargs):
 
             message_ar = "مرحبًا! \n \n عزيزي/عزيزتي {}, \n \n لديك استشارة طبية جديدة تم تقديمها من خلال منصة الحكيم للاستشارات الطبية. يرجى مراجعة الاستشارة واتخاذ الخطوات اللازمة. \n \n شكرًا لاهتمامك واستجابتك السريعة. \n \n مع خالص التحية، \n إدارة منصة الحكيم للاستشارات الطبية المجانية."
 
-            # message_en += f"\n\nView Consultation: {consultation_link}"
-            # message_ar += f"\n\nرابط الاستشارة: {consultation_link}"
+            message_en += f"\n\nView Consultation: {consultation_link}"
+            message_ar += f"\n\nرابط الاستشارة: {consultation_link}"
 
             doctor_name_en = doctor.name_en
 
@@ -45,4 +45,4 @@ def send_email_to_user(sender, instance, created, **kwargs):
 
             message = message_en + " \n \n \n \n " + message_ar
 
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [doctor.email])
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [doctor.email])
