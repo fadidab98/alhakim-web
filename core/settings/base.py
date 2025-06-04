@@ -141,3 +141,6 @@ CLOUDINARY_STORAGE = {
 RECAPTCHA_PUBLIC_KEY = "6LdbtlArAAAAAJtcCqXD2NDpKgtbEuHGWocHCRzD"
 RECAPTCHA_PRIVATE_KEY = "6LdbtlArAAAAAGTs71nD7EhFK77y5h8fJJrSxnBM"
 SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"]
+
+
+SITE_DOMAIN = "https://www.alhakimconsultation.com"
