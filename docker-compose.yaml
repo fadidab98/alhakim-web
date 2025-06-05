@@ -8,6 +8,7 @@ services:
     pull_policy: always
     command: gunicorn --bind 0.0.0.0:8000 core.wsgi:application
     volumes:
+      - ./staticfiles:/app/staticfiles
       - ./:/app
     ports:
       - "6090:8000"
