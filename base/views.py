@@ -146,6 +146,7 @@ class Consult(LoginRequiredMixin, generic.TemplateView):
                     print(ex)  # Exception is printed to console
                     transaction.set_rollback(True)
                     messages.error(request, _("حدث خطأ أثناء معالجة الطلب."))
+                    messages.error(request, ex)
         else:
             messages.error(request, _("حدث خطأ في استمارة الاستشارة."))
 

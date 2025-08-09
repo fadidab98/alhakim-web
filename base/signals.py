@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 
 from .models import Consultation
 
@@ -23,10 +24,14 @@ def send_email_to_user(sender, instance, created, **kwargs):
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ["berrofouad66@gmail.com"])
         else:
             doctor = User.objects.get(phone__icontains=instance.doctor)
+            consultation_link = f"{settings.SITE_DOMAIN}{instance.get_absolute_url()}"
 
             message_en = "Hello! \n \n Dear {}, \n \n You have a new medical consultation submitted through Al-Hakim platform for medical consultations. Please review the consultation and take the necessary steps. \n \n Thank you for your attention and prompt response.\n \n Best regards, \n Administration of Al-Hakim Free Medical Consultations Platform."
 
             message_ar = "مرحبًا! \n \n عزيزي/عزيزتي {}, \n \n لديك استشارة طبية جديدة تم تقديمها من خلال منصة الحكيم للاستشارات الطبية. يرجى مراجعة الاستشارة واتخاذ الخطوات اللازمة. \n \n شكرًا لاهتمامك واستجابتك السريعة. \n \n مع خالص التحية، \n إدارة منصة الحكيم للاستشارات الطبية المجانية."
+
+            message_en += f"\n\nView Consultation: {consultation_link}"
+            message_ar += f"\n\nرابط الاستشارة: {consultation_link}"
 
             doctor_name_en = doctor.name_en
 
@@ -40,4 +45,4 @@ def send_email_to_user(sender, instance, created, **kwargs):
 
             message = message_en + " \n \n \n \n " + message_ar
 
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [doctor.email])
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [doctor.email])
