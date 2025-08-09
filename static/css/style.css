@@ -1,9 +1,12 @@
+.fa-solid {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+}
 .logo,
 .register__img,
 .user__logo {
   object-fit: cover;
 }
-
 #hero h1,
 #hero h2,
 .section-title h2,
@@ -1065,4 +1068,3 @@ h6 {
   color: #fff !important;
   text-shadow: 1px 1px 3px #977b00;
 }
-
